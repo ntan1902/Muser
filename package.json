@@ -1,0 +1,37 @@
+{
+  "name": "Muser",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntan1902/Muser.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ntan1902/Muser/issues"
+  },
+  "homepage": "https://github.com/ntan1902/Muser#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "express-handlebars": "^5.2.1",
+    "express-handlebars-paginate": "^1.0.3",
+    "express-handlebars-sections": "^1.0.1",
+    "express-session": "^1.17.1",
+    "moment": "^2.29.1",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.2.5",
+    "sequelize": "^6.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
