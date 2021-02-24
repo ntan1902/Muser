@@ -17,11 +17,7 @@ app.use("/public", express.static("public"));
 
 require("./middlewares/sessions.mdw")(app);
 require("./middlewares/views.mdw")(app);
-
-// TEST
-app.get("/", (req, res) => {
-  res.send("Hello");
-});
+require("./middlewares/controllers.mdw")(app);
 
 app.listen(port, () => {
   console.log(`Web server is listening on http://localhost:${port}`);

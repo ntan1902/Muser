@@ -1,0 +1,13 @@
+{
+  "mysqlConfig": {
+    "dialect": "mysql",
+    "host": "localhost",
+    "username": "root",
+    "password": "123456",
+    "database": "muser",
+    "define": {
+      "timestamps": true,
+      "underscored": true
+    }
+  }
+}
