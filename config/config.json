@@ -6,7 +6,6 @@
     "password": "123456",
     "database": "muser",
     "define": {
-      "timestamps": true,
       "underscored": true
     }
   }
