@@ -28,10 +28,9 @@ const User = db.define("user", {
 
 User.associate = function (models) {
   User.hasMany(models.Playlist, { foreignKey: "user_id" });
-  User.hasMany(models.Review, { foreignKey: "user_id" });
 };
 
-User.sync().then(() => {
-  console.log("Table `Users` created");
-});
+// User.sync().then(() => {
+//   console.log("Table `Users` created");
+// });
 module.exports = User;

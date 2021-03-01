@@ -14,7 +14,7 @@ ArtistSong.associate = function (models) {
   ArtistSong.belongsTo(models.Song, { foreignKey: "song_id" });
 };
 
-ArtistSong.sync().then(() => {
-  console.log("Table `ArtistSongs` created");
-});
+// ArtistSong.sync().then(() => {
+//   console.log("Table `ArtistSongs` created");
+// });
 module.exports = ArtistSong;

@@ -22,7 +22,7 @@ Playlist.associate = function (models) {
   Playlist.hasMany(models.SongPlaylist, { foreignKey: "playlist_id" });
 };
 
-Playlist.sync().then(() => {
-  console.log("Table `Playlists` created");
-});
+// Playlist.sync().then(() => {
+//   console.log("Table `Playlists` created");
+// });
 module.exports = Playlist;

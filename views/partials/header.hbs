@@ -1,0 +1,43 @@
+<nav class="navbar navbar-expand-lg navbar-light shadow sticky-top">
+    <a class="navbar-brand" href="/">
+        <img src="/public/images/logo.png" width="40" height="40">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <h4 class="mt-2">Music Player</h4>
+            </li>
+            <li class="nav-item">
+                <form class="form-inline" id="form-search" method="GET">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-append">
+                            <button class="btn input-group-text " type="submit" id="btn-search">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                        <input class="form-control" type="search" placeholder="Search for anything" aria-label="Search"
+                            id="input-search" name="search" />
+                    </div>
+
+                </form>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-outline-success" href="#">
+                    Sign in
+                </a>
+            </li>
+            <li class="nav-item my-2">
+                <a class="btn btn-success" href="#">
+                    Sign up
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

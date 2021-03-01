@@ -1,0 +1,24 @@
+#form-search {
+  display: block;
+  width: 30rem;
+  height: 40px;
+  border: 1px solid #d5d5d5;
+  padding: 4px 11px 6px;
+  box-sizing: border-box;
+  border-radius: 16px;
+  margin: 6px 10px 0;
+}
+#input-search {
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  height: 22px;
+  margin-left: 3px;
+  margin-top: 2px;
+}
+
+#btn-search {
+  border: none;
+  background-color: white;
+  margin-top: 5px;
+}

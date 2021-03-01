@@ -18,11 +18,10 @@ const Song = db.define("Song", {
 Song.associate = function (models) {
   Song.belongsTo(models.Category, { foreignKey: "category_id" });
   Song.hasMany(models.SongPlaylist, { foreignKey: "song_id" });
-  Song.hasMany(models.Review, { foreignKey: "song_id" });
   Song.hasMany(models.ArtistSong, { foreignKey: "song_id" });
 };
 
-Song.sync().then(() => {
-  console.log("Table `Categories` created");
-});
+// Song.sync().then(() => {
+//   console.log("Table `Categories` created");
+// });
 module.exports = Song;

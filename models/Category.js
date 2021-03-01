@@ -14,7 +14,7 @@ Category.associate = function (models) {
   Category.hasMany(models.Song, { foreignKey: "category_id" });
 };
 
-Category.sync().then(() => {
-  console.log("Table `Categories` created");
-});
+// Category.sync().then(() => {
+//   console.log("Table `Categories` created");
+// });
 module.exports = Category;

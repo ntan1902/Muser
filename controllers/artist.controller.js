@@ -9,7 +9,6 @@ const SongPlaylist = require("../models/SongPlaylist");
 
 const User = require("../models/User");
 const ArtistSong = require("../models/ArtistSong");
-const Review = require("../models/Review");
 
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;

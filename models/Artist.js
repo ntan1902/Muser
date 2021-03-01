@@ -12,7 +12,7 @@ const Artist = db.define("artist", {
 Artist.associate = function (models) {
   Artist.hasMany(models.ArtistSong, { foreignKey: "artist_id" });
 };
-Artist.sync().then(() => {
-  console.log("Table `Artists` created");
-});
+// Artist.sync().then(() => {
+//   console.log("Table `Artists` created");
+// });
 module.exports = Artist;
