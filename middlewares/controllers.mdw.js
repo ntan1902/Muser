@@ -1,5 +1,6 @@
 module.exports = function (app) {
   app.use("/", require("../controllers/index.controller"));
+  app.use("/admin", require("../controllers/admin.controller"));
   app.use("/admin/artists/", require("../controllers/artist.controller"));
   app.use("/admin/users/", require("../controllers/user.controller"));
   app.use("/admin/songs/", require("../controllers/song.controller"));

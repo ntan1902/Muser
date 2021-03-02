@@ -3,10 +3,17 @@ const route = express.Router();
 
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
+const User = require("../models/User");
 
 route.get("/", async (req, res) => {
-  // Artist.findAll()
-  //   .then((artists) => res.send(artists))
-  //   .catch((err) => res.send(err));
+  User.findAll({ raw: true })
+    .then((users) =>
+      res.render("vwUser/index", {
+        layout: "main.hbs",
+        users
+      })
+    )
+    .catch((err) => res.send(err));
 });
+
 module.exports = route;
