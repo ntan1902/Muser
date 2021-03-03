@@ -20,11 +20,12 @@ body {
   padding: 0;
   height: 22px;
   margin-left: 3px;
-  margin-top: 2px;
+  margin-top: 5px;
 }
 
 #btn-search {
   border: none;
   background-color: white;
   margin-top: 5px;
+  /* color: white; */
 }

@@ -22,8 +22,8 @@ const User = db.define("user", {
   avatar: {
     type: Sequelize.TEXT,
   },
-  role: {
-    type: Sequelize.STRING,
+  is_admin: {
+    type: Sequelize.BOOLEAN,
   },
 });
 
