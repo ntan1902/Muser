@@ -1,3 +1,9 @@
+body {
+  font-family: "Poppins", "Lucida Sans", sans-serif, Arial, "Trebuchet MS",
+    "Lucida Sans Unicode", "Lucida Grande";
+  font-weight: 14px;
+}
+
 #form-search {
   display: block;
   width: 30rem;

@@ -9,11 +9,20 @@ route.get("/", async (req, res) => {
   User.findAll({ raw: true })
     .then((users) =>
       res.render("vwUser/index", {
-        layout: "main.hbs",
-        users
+        layout: "admin.hbs",
+        manageUsers: true,
+        users,
       })
     )
     .catch((err) => res.send(err));
+});
+
+route.get("/add", async (req, res) => {
+  res.render("vwUser/add.hbs");
+});
+
+route.post("/add", async (req, res) => {
+  res.render("vwUser/add.hbs");
 });
 
 module.exports = route;
