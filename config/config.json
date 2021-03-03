@@ -8,6 +8,9 @@
     "define": {
       "underscored": true,
       "timestamps": false
+    },
+    "query": {
+      "raw": true
     }
   }
 }

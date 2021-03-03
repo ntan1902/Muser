@@ -6,7 +6,7 @@ const Op = Sequelize.Op;
 const User = require("../models/User");
 
 route.get("/", async (req, res) => {
-  User.findAll({ raw: true })
+  User.findAll({ attributes: ["id", "name", "email"] })
     .then((users) =>
       res.render("vwUser/index", {
         layout: "admin.hbs",
