@@ -5,6 +5,7 @@ require("express-async-errors");
 
 const app = express();
 const port = process.env.PORT || 5000;
+const passport = require("passport")
 
 app.use(morgan("dev"));
 app.use(cors());
@@ -15,10 +16,14 @@ app.use(
 );
 app.use("/public", express.static("public"));
 
+
+
 require("./middlewares/sessions.mdw")(app);
 require("./middlewares/views.mdw")(app);
 require("./middlewares/controllers.mdw")(app);
-
+app.use(passport.initialize())
+app.use(passport.session())
+require("./Authentication/authentication") // passport session on the go
 app.listen(port, () => {
   console.log(`Web server is listening on http://localhost:${port}`);
 });
