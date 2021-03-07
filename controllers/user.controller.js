@@ -25,15 +25,47 @@ route.get("/add", async (req, res) => {
 });
 
 route.post("/add", async (req, res) => {
+
+let role = req.body.role;
+if(role == "admin") {
+  is_admin = true;
+} else {
+  is_admin = false;
+}
 const new_user = await User.create({
     email: req.body.email,
     password: req.body.password,
     name: req.body.name,
-    role:req.body.role,
-    is_admin: false
+    is_admin: is_admin
   })
   // console.log(new_user);
-  res.render("vwUser/add.hbs");
+  res.render("vwUser/add.hbs", {
+    layout:"admin.hbs"
+  });
 });
+
+route.get("/edit/:id", async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if(user.is_admin == 1) {
+    user.role = "admin"
+  } else {
+    user.role = "member"
+  }
+
+  console.log(user);
+  res.render("vwUser/edit.hbs", {
+    layout: "admin.hbs",
+    manageUsers: true,
+    user
+  })
+});
+
+route.post("/edit/:id", async (req, res) => {
+  res.render("vwUser/edit", {
+    layout: "admin.hbs",
+    manageUsers: true,
+  })
+});
+
 
 module.exports = route;
