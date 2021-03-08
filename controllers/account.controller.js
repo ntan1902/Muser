@@ -11,7 +11,7 @@ route.get("/signup", (req, res) => {
   res.render("vwAccount/signup");
 });
 
-route.post("/signup", (req, res) => {
+route.post("/signup", async (req, res) => {
   const password = bcrypt.hash(req.body.password, 8);
   const user = {
     name: req.body.name,
@@ -19,21 +19,26 @@ route.post("/signup", (req, res) => {
     password,
     is_admin: false,
   };
-  userService
-    .add(user)
-    .then((data) => {
-      res.render("vwAccount/signup", {
-        message: "Your account has been created",
-      });
-    })
-    .catch((err) => {
-      res.send(err);
-    });
+  // userService
+  //   .add(user)
+  //   .then((data) => {
+  //     res.render("vwAccount/signup", {
+  //       message: "Your account has been created",
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     res.send(err);
+  //   });
+  await userService.add(user);
+  res.render("vwAccount/signup", {
+    message: "Your account has been created",
+  });
 });
 
 route.get("/signin", (req, res) => {
   res.render("vwAccount/signin");
 });
+
 route.post(
   "/signin",
   passport.authenticate("local", {
@@ -43,17 +48,25 @@ route.post(
   })
 );
 
-route.get("/isUniqueEmail", (req, res) => {
+route.get("/isUniqueEmail", async (req, res) => {
   const email = req.query.email;
-  userService
-    .getOneByEmail(email)
-    .then((data) => {
-      if (data === null) {
-        res.json(true);
-      } else {
-        res.json(false);
-      }
-    })
-    .catch((err) => res.send(err));
+  // userService
+  //   .getOneByEmail(email)
+  //   .then((data) => {
+  //     if (data === null) {
+  //       res.json(true);
+  //     } else {
+  //       res.json(false);
+  //     }
+  //   })
+  //   .catch((err) => res.send(err));
+  let data = await userService.getOneByEmail(email);
+
+  if (data === null) {
+    res.json(true);
+  } else {
+    res.json(false);
+  }
 });
+
 module.exports = route;

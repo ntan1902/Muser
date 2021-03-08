@@ -3,17 +3,13 @@ const route = express.Router();
 
 let userService = require("../services/user.service");
 
-route.get("/", (req, res) => {
-  userService
-    .getAll()
-    .then((data) => {
-      res.render("vwUser/index", {
-        layout: "admin.hbs",
-        manageUsers: true,
-        users: data,
-      });
-    })
-    .catch((err) => res.send(err));
+route.get("/", async (req, res) => {
+  const users = await userService.getAll();
+  res.render("vwUser/index", {
+    layout: "admin.hbs",
+    manageUsers: true,
+    users
+  });
 });
 
 route.get("/add", async (req, res) => {
@@ -31,12 +27,17 @@ route.post("/add", async (req, res) => {
     is_admin: false,
   };
 
-  userService
-    .add(user)
-    .then((data) => {
-      res.redirect("/admin/users/add");
-    })
-    .catch((err) => res.send(err));
+  await userService.add(user);
+  res.redirect("/admin/users/add", {
+    layout:"admin.hbs",
+    manageUsers:true
+  });
+  // userService
+  //   .add(user)
+  //   .then((data) => {
+  //     res.redirect("/admin/users/add");
+  //   })
+  //   .catch((err) => res.send(err));
 });
 
 route.get("/edit/:id", async (req, res) => {
