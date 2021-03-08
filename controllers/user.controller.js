@@ -1,39 +1,42 @@
 const express = require("express");
 const route = express.Router();
 
-const Sequelize = require("sequelize");
-const Op = Sequelize.Op;
-const User = require("../models/User");
+let userService = require("../services/user.service");
 
-route.get("/", async (req, res) => {
-  await User.findAll({ attributes: ["id", "name", "email"] })
-    .then((users) =>
+route.get("/", (req, res) => {
+  userService
+    .getAll()
+    .then((data) => {
       res.render("vwUser/index", {
         layout: "admin.hbs",
         manageUsers: true,
-        users
-      })
-    )
-    // .catch((err) => res.send(err));
+        users: data,
+      });
+    })
+    .catch((err) => res.send(err));
 });
 
 route.get("/add", async (req, res) => {
   res.render("vwUser/add.hbs", {
     layout: "admin.hbs",
-    manageUsers: true
+    manageUsers: true,
   });
 });
 
 route.post("/add", async (req, res) => {
-const new_user = await User.create({
+  const user = {
     email: req.body.email,
     password: req.body.password,
     name: req.body.name,
-    role:req.body.role,
-    is_admin: false
-  })
-  // console.log(new_user);
-  res.render("vwUser/add.hbs");
+    is_admin: false,
+  };
+
+  userService
+    .add(user)
+    .then((data) => {
+      res.redirect("/admin/users/add");
+    })
+    .catch((err) => res.send(err));
 });
 
 module.exports = route;

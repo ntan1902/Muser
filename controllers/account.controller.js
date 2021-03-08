@@ -2,29 +2,36 @@ const express = require("express");
 const route = express.Router();
 
 const User = require("../models/User");
-const Sequelize = require("sequelize");
 const passport = require("passport");
-const { Router } = require("express");
-const Op = Sequelize.Op;
 const bcrypt = require("bcrypt");
 
-route.get("/signup", async (req, res) => {
+let userService = require("../services/user.service");
+
+route.get("/signup", (req, res) => {
   res.render("vwAccount/signup");
 });
 
-route.post("/signup", async (req, res) => {
-  const password = await bcrypt.hash(req.body.password, 8);
-  const user = await User.create({
+route.post("/signup", (req, res) => {
+  const password = bcrypt.hash(req.body.password, 8);
+  const user = {
     name: req.body.name,
     email: req.body.email,
     password,
-    isAdmin: false,
-  });
-  await user.save();
-  res.render("vwAccount/signup", { message: "Your account has been created" });
+    is_admin: false,
+  };
+  userService
+    .add(user)
+    .then((data) => {
+      res.render("vwAccount/signup", {
+        message: "Your account has been created",
+      });
+    })
+    .catch((err) => {
+      res.send(err);
+    });
 });
 
-route.get("/signin", async (req, res) => {
+route.get("/signin", (req, res) => {
   res.render("vwAccount/signin");
 });
 route.post(
@@ -35,16 +42,18 @@ route.post(
     failureFlash: true,
   })
 );
-module.exports = route;
 
-route.get("/isUniqueEmail", async (req, res) => {
+route.get("/isUniqueEmail", (req, res) => {
   const email = req.query.email;
-  const user = await User.findOne({
-    where: { email: email },
-  });
-  if (user === null) {
-    return res.json(true);
-  } else {
-    return res.json(false);
-  }
+  userService
+    .getOneByEmail(email)
+    .then((data) => {
+      if (data === null) {
+        res.json(true);
+      } else {
+        res.json(false);
+      }
+    })
+    .catch((err) => res.send(err));
 });
+module.exports = route;
