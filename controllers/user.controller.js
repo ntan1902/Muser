@@ -39,4 +39,27 @@ route.post("/add", async (req, res) => {
     .catch((err) => res.send(err));
 });
 
+route.get("/edit/:id", async (req, res) => {
+  const user = await User.findByPk(req.params.id);
+  if (user.is_admin == 1) {
+    user.role = "admin";
+  } else {
+    user.role = "member";
+  }
+
+  console.log(user);
+  res.render("vwUser/edit.hbs", {
+    layout: "admin.hbs",
+    manageUsers: true,
+    user,
+  });
+});
+
+route.post("/edit/:id", async (req, res) => {
+  res.render("vwUser/edit", {
+    layout: "admin.hbs",
+    manageUsers: true,
+  });
+});
+
 module.exports = route;
