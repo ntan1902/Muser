@@ -47,7 +47,6 @@
             const email = $('#txtEmail').val();
             const password = $('#txtPassword').val();
             const name = $('#txtName').val();
-            const role = $('#txtRole').val();
             const description = $('#txtUserDescription').val();
 
             if (checkEmail(email) === false) {
@@ -70,14 +69,6 @@
                 Swal.fire({
                     title: 'Error!',
                     text: 'Invalid Name',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if (role === "Choose your role") {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Role',
                     icon: 'error',
                     confirmButtonText: 'Retry'
                 })
@@ -128,25 +119,16 @@
                 </div>
                 <div class="form-group">
                     <label for="txtPassword">Password</label>
-                    <input type="password" class="form-control" id="txtPassword" name="password" required>
+                    <input type="password" class="form-control" id="txtPassword" name="password" >
                 </div>
                 <div class="form-group">
                     <label for="txtName">Name</label>
                     <input type="text" class="form-control" id="txtName" name="name">
                 </div>
                 <div class="form-group">
-                    <label for="txtRole" class="mt-2">Role</label>
-                    <select name='role' id="txtRole">
-                        <option selected>Choose your role</option>
-                        <option value="member">Member</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="txtUserDescription">User Description</label>
                     <textarea class="form-control" id="txtUserDescription" name="userDescription"></textarea>
                 </div>
-                {{!-- <input type="hidden" class="form-control" name="role" value="teacher"> --}}
 
             </div>
         </div>

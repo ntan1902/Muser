@@ -39,4 +39,15 @@ service.add = async (user) => {
   return await User.create(user);
 };
 
+service.update = async (id, user) => {
+  return await User.update(
+    {
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    },
+    { where: { id: id } }
+  );
+};
+
 module.exports = service;

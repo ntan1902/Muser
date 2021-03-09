@@ -35,8 +35,6 @@
     {{!-- < File Upload --}}
     <script>
 
-        $('#txtRole').val($('#txtRoletemp').val());
-
         function checkEmail(email) {
             if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
                 return true;
@@ -46,17 +44,12 @@
             }
         }
 
-        $('#save').click(function () {
-            $('#frmEdit').attr('action', '/admin/users/patch');
-            $('#frmEdit').submit();
-        });
 
         $('#frmEdit').on('submit', function (e) {
             e.preventDefault();
 
             const name = $('#txtName').val();
             const email = $('#txtEmail').val();
-            const role = $('#txtRole').val();
             const description = $('#txtUserDescription').val();
 
             if (checkEmail(email) === false) {
@@ -71,14 +64,6 @@
                 Swal.fire({
                     title: 'Error!',
                     text: 'Invalid Name',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if (role.length === 0) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Role',
                     icon: 'error',
                     confirmButtonText: 'Retry'
                 })
@@ -99,7 +84,7 @@
     </script>
 
     {{/section}}
-    <form id="frmEdit" method="POST" enctype="multipart/form-data">
+    <form id="frmEdit" method="POST" action="">
         <div class="card">
             <div class="card-header">
                 <h4>User</h4>
@@ -107,7 +92,7 @@
             <div class="card-body">
                 <div class="form-group">
                     <label for="txtID">#</label>
-                    <input type="text" class="form-control" id="txtID" name="idUser" readonly
+                    <input type="text" class="form-control" id="txtID" name="id" readonly
                         value="{{this.user.id}}">
                 </div>
                 
@@ -134,16 +119,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="txtRole" class="my-2">Role</label>
-                    <input type="hidden" class="form-control" id="txtRoletemp" name="roletemp"
-                        value="{{this.user.role}}">
-                    <select name='role' id="txtRole" value="{{this.user.role}}">
-                        <option value="member">Member</option>
-                        <option value="admin">Admin</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
                     <label for="txtUserDescription">User Description</label>
                     <textarea class="form-control" id="txtUserDescription"
                         name="userDescription">{{this.user.userDescription}}</textarea>
@@ -154,7 +129,7 @@
                     <i class="fa fa-backward" aria-hidden="true"></i>
                     Back to List
                 </a>
-                <button class="btn btn-success" type="button" formaction="/admin/users/patch" id="save">
+                <button class="btn btn-success" type="submit">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     Save
                 </button>

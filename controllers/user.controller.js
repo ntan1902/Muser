@@ -52,10 +52,13 @@ route.get("/edit/:id", async (req, res) => {
 });
 
 route.post("/edit/:id", async (req, res) => {
-  res.render("vwUser/edit", {
-    layout: "admin.hbs",
-    manageUsers: true,
-  });
+  const user = {
+    avatar: req.body.avatar,
+    name: req.body.name,
+  };
+  console.log(user);
+  await userService.update(req.body.id, user);
+  res.redirect("/admin/users");
 });
 
 module.exports = route;
