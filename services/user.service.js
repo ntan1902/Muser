@@ -21,6 +21,15 @@ service.getOneByEmail = async (email) => {
   return await User.findOne({ where: { email: email } });
 };
 
+service.getOneById = async (id) => {
+  // return new Promise((resolve, reject) => {
+  //   User.findOne({ where: { email: email } })
+  //     .then((data) => resolve(data))
+  //     .catch((err) => reject(new Error(err)));
+  // });
+  return await User.findOne({ where: { id: id } });
+};
+
 service.add = async (user) => {
   // return new Promise((resolve, reject) => {
   //   User.create(user)

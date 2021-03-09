@@ -8,7 +8,7 @@ route.get("/", async (req, res) => {
   res.render("vwUser/index", {
     layout: "admin.hbs",
     manageUsers: true,
-    users
+    users,
   });
 });
 
@@ -29,8 +29,8 @@ route.post("/add", async (req, res) => {
 
   await userService.add(user);
   res.redirect("/admin/users/add", {
-    layout:"admin.hbs",
-    manageUsers:true
+    layout: "admin.hbs",
+    manageUsers: true,
   });
   // userService
   //   .add(user)
@@ -41,14 +41,9 @@ route.post("/add", async (req, res) => {
 });
 
 route.get("/edit/:id", async (req, res) => {
-  const user = await User.findByPk(req.params.id);
-  if (user.is_admin == 1) {
-    user.role = "admin";
-  } else {
-    user.role = "member";
-  }
+  const id = req.params.id;
+  const user = await userService.getOneById(id);
 
-  console.log(user);
   res.render("vwUser/edit.hbs", {
     layout: "admin.hbs",
     manageUsers: true,
