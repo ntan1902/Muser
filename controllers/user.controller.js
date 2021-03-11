@@ -42,7 +42,7 @@ route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
   if(req.file === undefined) {
     imgPath = "";
   } else {
-    imgPath = "/public/images/avatars" + req.file.filename;
+    imgPath = "/public/images/avatars/" + req.file.filename;
   }
   const user = {
     email: req.body.email,
@@ -51,12 +51,10 @@ route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
     avatar: imgPath,
     is_admin: false,
   };
+  console.log(user);
 
   await userService.add(user);
-  res.redirect("/admin/users/add", {
-    layout: "admin.hbs",
-    manageUsers: true,
-  });
+  res.redirect("/admin/users");
   // userService
   //   .add(user)
   //   .then((data) => {
@@ -68,7 +66,7 @@ route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
 route.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
   const user = await userService.getOneById(id);
-
+  console.log(user);
   res.render("vwUser/edit.hbs", {
     layout: "admin.hbs",
     manageUsers: true,
@@ -79,9 +77,9 @@ route.get("/edit/:id", async (req, res) => {
 route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
   let imgPath;
   if(req.file === undefined) {
-    imgPath = "";
+    imgPath = req.body.previewAvatar;
   } else {
-    imgPath = "/public/images/avatars" + req.file.filename;
+    imgPath = "/public/images/avatars/" + req.file.filename;
   }
   const user = {
     avatar: imgPath,
