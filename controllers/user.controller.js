@@ -1,7 +1,25 @@
 const express = require("express");
 const route = express.Router();
+const multer = require("multer");
+const path = require("path");
 
 let userService = require("../services/user.service");
+
+//Set Storage Engine for User's Avatar
+const storageAvatar = multer.diskStorage({
+  destination: "./public/images/avatars",
+  filename: function (req, file, callback) {
+    callback(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+const uploadAvatar = multer({
+  storage: storageAvatar,
+  limits: { fileSize: 1000000 }
+});
 
 route.get("/", async (req, res) => {
   const users = await userService.getAll();
@@ -19,11 +37,18 @@ route.get("/add", async (req, res) => {
   });
 });
 
-route.post("/add", async (req, res) => {
+route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
+  let imgPath;
+  if(req.file === undefined) {
+    imgPath = "";
+  } else {
+    imgPath = "/public/images/avatars" + req.file.filename;
+  }
   const user = {
     email: req.body.email,
     password: req.body.password,
     name: req.body.name,
+    avatar: imgPath,
     is_admin: false,
   };
 
@@ -51,9 +76,15 @@ route.get("/edit/:id", async (req, res) => {
   });
 });
 
-route.post("/edit/:id", async (req, res) => {
+route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
+  let imgPath;
+  if(req.file === undefined) {
+    imgPath = "";
+  } else {
+    imgPath = "/public/images/avatars" + req.file.filename;
+  }
   const user = {
-    avatar: req.body.avatar,
+    avatar: imgPath,
     name: req.body.name,
   };
   console.log(user);
