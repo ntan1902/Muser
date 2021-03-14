@@ -7,4 +7,7 @@ const Sequelize = require("sequelize");
 const Op = Sequelize.Op;
 
 route.get("/", async (req, res) => {});
+
+
+
 module.exports = route;

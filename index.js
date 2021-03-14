@@ -13,6 +13,9 @@ app.use(
     extended: true,
   })
 );
+// const path = require("path")
+// const viewsPath = path.join(__dirname,"../views")
+// app.set('views', viewsPath)
 app.use("/public", express.static("public"));
 
 require("./middlewares/sessions.mdw")(app);

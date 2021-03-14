@@ -6,6 +6,7 @@ module.exports = function (app) {
   app.use("/admin/songs/", require("../controllers/song.controller"));
   app.use("/admin/categories/", require("../controllers/category.controller"));
   app.use("/account/", require("../controllers/account.controller"));
+  app.use("/login", require("../controllers/account.controller"));
 
   // Handle not found error
   app.use(function (req, res) {
