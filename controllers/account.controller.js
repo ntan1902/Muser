@@ -37,6 +37,9 @@ route.post("/signup", async (req, res) => {
 });
 
 route.get("/signin", (req, res) => {
+  if(req.user){
+    return res.redirect("/")
+  }
   res.render("vwAccount/signin");
 });
 

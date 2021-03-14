@@ -5,7 +5,7 @@ function initPassport(passport,findByCredential,findUserByID){
         try{
             const user = await findByCredential(username,password)
             console.log(user)
-            if(!user){
+            if(user==[]){
                 return done(null,false,{message:'Wrong username or password'})
             }
             else{
@@ -17,10 +17,10 @@ function initPassport(passport,findByCredential,findUserByID){
     }
     passport.use(new LocalStategy({usernameField: 'email',passwordFieldL:'password'}, authenticateUser))
     passport.serializeUser((user,done)=>{
-        done(null,user)
+        done(null,user.id)
     })
-    passport.deserializeUser(async (user,done)=>{
-        done(null, await findUserByID(user._id))
+    passport.deserializeUser(async (id,done)=>{
+        done(null, await findUserByID(id))
     })
 }
 module.exports = initPassport

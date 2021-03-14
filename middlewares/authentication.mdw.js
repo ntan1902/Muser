@@ -16,24 +16,26 @@ initPassport(
   passport,
   async (email, password) => {
     try {
-      var user = await User.findAll({
+      var user = await User.findOne({
         where: {
           email: email,
         },
       });
       if (user) {
-        const valid = bcrypt.compare(password, user.password);
+        const valid = await bcrypt.compare(password, user.password);
         if (valid) {
           return user;
         }
       }
-      return user;
+      else{
+        return null
+      }
     } catch (e) {
       return null;
     }
   },
   async (id) => {
-    return User.findAll({
+    return User.findOne({
       where: {
         id: id,
       },

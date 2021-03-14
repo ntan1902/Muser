@@ -36,7 +36,7 @@ service.add = async (user) => {
   //     .then((data) => resolve(data))
   //     .catch((err) => reject(new Error(err)));
   // });
-  return await User.create(user);
+    return await User.create(user);
 };
 
 service.update = async (id, user) => {
