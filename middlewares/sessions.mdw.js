@@ -1,6 +1,8 @@
 const session = require("express-session");
+const flash = require("express-flash");
 
 module.exports = function (app) {
+  app.use(flash());
   app.set("trust proxy", 1);
   app.use(
     session({
