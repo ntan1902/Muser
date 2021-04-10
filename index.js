@@ -11,16 +11,15 @@ app.use(
     extended: true,
   })
 );
-// const path = require("path")
-// const viewsPath = path.join(__dirname,"../views")
-// app.set('views', viewsPath)
+
 app.use("/public", express.static("public"));
 
 require("./middlewares/sessions.mdw")(app);
 require("./middlewares/views.mdw")(app);
 require("./middlewares/locals.mdw")(app);
 require("./middlewares/controllers.mdw")(app);
-
+ 
+require("./authentication/authen")
 app.listen(port, () => {
   console.log(`Web server is listening on http://localhost:${port}`);
 });

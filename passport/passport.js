@@ -1,11 +1,11 @@
 const LocalStategy = require("passport-local").Strategy
 
 function initPassport(passport,findByCredential,findUserByID){
-    const authenticateUser= async (username,password,done)=>{
+    const authenticateUser= (username,password,done)=>{
         try{
-            const user = await findByCredential(username,password)
+            const user = findByCredential(username,password)
             console.log(user)
-            if(user==[]){
+            if(user==null){
                 return done(null,false,{message:'Wrong username or password'})
             }
             else{
@@ -20,7 +20,7 @@ function initPassport(passport,findByCredential,findUserByID){
         done(null,user.id)
     })
     passport.deserializeUser(async (id,done)=>{
-        done(null, await findUserByID(id))
+        done(null, findUserByID(id))
     })
 }
 module.exports = initPassport
