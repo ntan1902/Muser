@@ -40,23 +40,52 @@ route.get("/add", async (req, res) => {
   });
 });
 
-// route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
-//   let imgPath;
-//   if (req.file === undefined) {
-//     imgPath = "";
-//   } else {
-//     imgPath = "/public/images/avatars/" + req.file.filename;
-//   }
-//   const user = {
-//     email: req.body.email,
-//     password: req.body.password,
-//     name: req.body.name,
-//     avatar: imgPath,
-//     is_admin: false,
-//   };
+route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
 
-//   res.redirect("/admin/users");
-// });
+  let imgPath;
+  if (req.file === undefined) {
+    imgPath = "";
+  } else {
+    imgPath = "/public/images/users/" + req.file.filename;
+  }
+
+  const new_user = {
+    email: req.body.email,
+    password: req.body.password,
+    userName: req.body.name,
+    imageURL: imgPath
+  };
+
+  db.auth().createUserWithEmailAndPassword(new_user.email, new_user.password)
+  .then(() => {
+    var newKey = db.database().ref().child("/Users").push().key;
+    db.database()
+      .ref("/Users/" + newKey)
+      .set(
+        {
+          id: newKey,
+          userName: new_user.userName,
+          email: new_user.email,
+          imageURL: new_user.imageURL
+        },
+        (err) => {
+          if (err) {
+            console.log("Add failed !");
+          } else {
+            console.log("Add success !");
+          }
+        }
+      );
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log(errorCode);
+    console.log(errorMessage);
+  });
+
+  res.redirect("/admin/users");
+});
 
 route.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
@@ -106,5 +135,20 @@ route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
   // await userService.update(req.body.id, user);
   res.redirect("/admin/users");
 });
+
+route.get("/isUniqueEmail", async (req, res) => {
+  const email = req.query.email;
+  const userRef = db.database().ref("/Users");
+  const query = userRef.orderByChild('email').equalTo(email);
+  query.on('value', (snapshot) => {
+    var data = snapshot.val();
+    if (data === null) {
+      res.json(true);
+    } else {
+      res.json(false);
+    }
+  });
+});
+
 
 module.exports = route;

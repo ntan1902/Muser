@@ -3,15 +3,9 @@ const router = express.Router();
 const db = require("../database/db");
 
 router.get("/", async function (req, res) {
-  const categoryRef = db.database().ref("/Categories");
-  categoryRef.on("value", (snapshot) => {
-
-    categories = snapshot.val();
-    res.render("vwCategory/index", {
-      layout: "admin.hbs",
-      manageCategories: true,
-      listCategories: categories,
-    });
+  res.render("vwCategory/index", {
+    layout:"admin.hbs",
+    manageCategories:true
   })
 });
 
