@@ -5,9 +5,9 @@
 
     <div class="card-header d-flex justify-content-between">
         <h4>Users</h4>
-        <a class="btn btn-outline-success" href="/admin/users/add" role="button">
+        <a class="btn btn-outline-success" href="/admin/artists/add" role="button">
             <i class="fa fa-plus" aria-hidden="true"></i>
-            Add User
+            Add Artist
         </a>
     </div>
     <div class="card-body">
@@ -16,7 +16,6 @@
                 <tr>
                     <th>#</th>
                     <th>Full Name</th>
-                    <th>Email</th>
                     <th>Edit</th>
                 </tr>
             </thead>
@@ -25,19 +24,17 @@
                 <tr>
                     <th>#</th>
                     <th>Full Name</th>
-                    <th>Email</th>
                     <th>Edit</th>
                 </tr>
             </tfoot>
 
             <tbody>
-                {{#each this.users}}
+                {{#each this.artists}}
                     <tr>
                         <th scope="row">{{id}}</th>
-                        <td>{{userName}}</td>
-                        <td>{{email}}</td>
+                        <td>{{artistName}}</td>
                         <td>
-                            <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/users/edit/{{id}}"
+                            <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/artists/edit/{{id}}"
                                 role="button">
                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                             </a>

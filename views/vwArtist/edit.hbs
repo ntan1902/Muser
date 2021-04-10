@@ -7,20 +7,6 @@
 {{/section}}
 
 {{#section 'js'}}
-    {{!-- Editor > --}}
-    <script src="https://cdn.tiny.cloud/1/ezd73nxbzc7bu6e86g2l82jbbffke0mwevwrnyvc5q8h89j6/tinymce/5/tinymce.min.js"
-        referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: 'textarea',
-            plugins: 'paste image link autolink lists table media',
-            menubar: false,
-            toolbar: [
-                'undo redo | bold italic underline strikethrough | numlist bullist | alignleft aligncenter alignright | forecolor backcolor | table link image media',
-            ],
-        });
-    </script>
-    {{!--< Editor --}}
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
     {{!-- File Upload> --}}
@@ -37,32 +23,12 @@
     {{!-- < File Upload --}}
     <script>
 
-        function checkEmail(email) {
-            if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-                return true;
-
-            } else {
-                return false;
-            }
-        }
-
-
         $('#frmEdit').on('submit', function (e) {
             e.preventDefault();
 
             const name = $('#txtName').val();
-            const email = $('#txtEmail').val();
-            const description = $('#txtUserDescription').val();
 
-            if (checkEmail(email) === false) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid email',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if (name.length === 0) {
+             if (name.length === 0) {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Invalid Name',
@@ -89,19 +55,19 @@
 <form id="frmEdit" method="POST" action="" enctype="multipart/form-data">
     <div class="card">
         <div class="card-header">
-            <h4>User</h4>
+            <h4>Artist</h4>
         </div>
         <div class="card-body">
             <div class="form-group">
                 <label for="txtID">#</label>
-                <input type="text" class="form-control" id="txtID" name="id" readonly value="{{this.user.id}}">
+                <input type="text" class="form-control" id="txtID" name="id" readonly value="{{this.artist.id}}">
             </div>
 
             <div class="form-group">
                 <label>Preview Avatar</label> <br>
-                <img style="width: 200px;" src="{{this.user.imageURL}}" alt="no preview image found">
+                <img style="width: 200px;" src="{{this.artist.imageURL}}" alt="no preview image found">
             </div>
-            <input type="hidden" value="{{this.user.imageURL}}" name="previewAvatar">
+            <input type="hidden" value="{{this.artist.imageURL}}" name="previewAvatar">
 
             <div class="form-group">
                 <label for="txtAvatar">New Avatar</label>
@@ -109,18 +75,13 @@
             </div>
 
             <div class="form-group">
-                <label for="txtEmail">Email</label>
-                <input type="text" class="form-control" id="txtEmail" name="email" value="{{this.user.email}}" readonly>
-            </div>
-
-            <div class="form-group">
-                <label for="txtName">UserName</label>
-                <input type="text" class="form-control" id="txtName" name="name" value="{{this.user.userName}}">
+                <label for="txtEmail">Name</label>
+                <input type="text" class="form-control" id="txtName" name="name" value="{{this.artist.artistName}}" >
             </div>
 
         </div>
         <div class="card-footer">
-            <a class="btn btn-primary" href="/admin/users" role="button">
+            <a class="btn btn-primary" href="/admin/artists" role="button">
                 <i class="fa fa-backward" aria-hidden="true"></i>
                 Back to List
             </a>

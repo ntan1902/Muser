@@ -1,4 +1,79 @@
 const express = require("express");
-const route = express.Router();
+const router = express.Router();
+const db = require("../database/db");
 
-module.exports = route;
+router.get("/", async function (req, res) {
+  const categoryRef = db.database().ref("/Categories");
+  categoryRef.on("value", (snapshot) => {
+
+    categories = snapshot.val();
+    res.render("vwCategory/index", {
+      layout: "admin.hbs",
+      manageCategories: true,
+      listCategories: categories,
+    });
+  })
+});
+
+router.get("/edit/:id", async function (req, res) {
+  const id = req.params.id;
+  const categoryRef = db.database().ref("/Categories/" + id);
+
+  categoryRef.on("value", (snapshot) => {
+    category = snapshot.val();
+    res.render("vwCategory/edit", {
+      layout: "admin.hbs",
+      manageCategories: true,
+      category,
+    });
+  });
+});
+
+router.post("/edit/:id", async function (req, res) {
+  const id = req.params.id;
+  db.database()
+    .ref("/Categories/" + id)
+    .update(
+      {
+        categoryName: req.body.categoryName,
+      },
+      (err) => {
+        if (err) {
+          console.log("Update failed !");
+        } else {
+          console.log("Update success !");
+        }
+      }
+    );
+
+  res.redirect("/admin/categories");
+});
+
+router.get("/add", function (req, res) {
+  res.render("vwCategory/add", {
+    layout: "admin.hbs",
+  });
+});
+
+router.post("/add", async function (req, res) {
+  var newKey = db.database().ref().child("/Categories").push().key;
+  db.database()
+    .ref("/Categories/" + newKey)
+    .set(
+      {
+        id: newKey,
+        categoryName: req.body.categoryName,
+      },
+      (err) => {
+        if (err) {
+          console.log("Add failed !");
+        } else {
+          console.log("Add success !");
+        }
+      }
+    );
+
+  res.redirect("/admin/categories");
+});
+
+module.exports = router;
