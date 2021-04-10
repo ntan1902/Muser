@@ -47,7 +47,7 @@ route.post("/add", upload.single("avatar"), async (req, res) => {
     .resize({ width: 200, height: 200 })
     .png()
     .toBuffer();
-
+    console.log(buffer)
     var storageRef = firebase.storage().ref("images/avatars/");
     storageRef.put(buffer.toString("base64")).then((snapshot) => {
       console.log("Upload image successful !");
@@ -55,7 +55,6 @@ route.post("/add", upload.single("avatar"), async (req, res) => {
       console.log(snapshot.getDownloadURL());
     })
   }
-
   const new_user = {
     email: req.body.email,
     password: req.body.password,
