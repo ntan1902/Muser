@@ -1,9 +1,11 @@
 const express = require("express");
 const route = express.Router();
+const checkAuthen = require("../authentication/check")
 
-route.get("/", function (req, res) {
+route.get("/", checkAuthen, function (req, res) {
   res.render("vwAdmin/index", {
     layout: "main.hbs",
+    checked: true
   });
 });
 

@@ -9,35 +9,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <h4 class="mt-2">Music Player</h4>
-            </li>
-            <li class="nav-item">
-                <form class="form-inline" id="form-search" method="GET">
-                    <div class="input-group input-group-sm">
-                        <div class="input-group-append">
-                            <button class="btn input-group-text" type="submit" id="btn-search">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
-                        <input class="form-control" type="search" placeholder="Search for anything" aria-label="Search"
-                            id="input-search" name="search" />
-                    </div>
-
-                </form>
+                <h4 class="mt-2">Tin Muser</h4>
             </li>
         </ul>
-
+        {{#if checked}}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item mr-2 my-2">
-                <a class="btn btn-outline-success" href="/account/signin">
-                    Sign in
-                </a>
+                <p class="btn btn-outline-success active">
+                    TinMuser Administrator
+                </p>
             </li>
-            <li class="nav-item my-2">
-                <a class="btn btn-success" href="/account/signup">
-                    Sign up
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-outline-success" href="/account/logout">
+                    Logout
                 </a>
             </li>
         </ul>
+        {{/if}}
     </div>
 </nav>
