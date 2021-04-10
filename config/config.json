@@ -3,7 +3,7 @@
     "dialect": "mysql",
     "host": "localhost",
     "username": "root",
-    "password": "admin",
+    "password": "123456",
     "database": "muser",
     "define": {
       "underscored": true,
@@ -12,5 +12,14 @@
     "query": {
       "raw": true
     }
+  },
+  "firebaseConfig": {
+    "apiKey": "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
+    "authDomain": "tinmuser.firebaseapp.com",
+    "databaseURL": "https://tinmuser-default-rtdb.firebaseio.com",
+    "projectId": "tinmuser",
+    "storageBucket": "tinmuser.appspot.com",
+    "messagingSenderId": "963218315977",
+    "appId": "1:963218315977:web:4e1475ccbcb065110e4b18"
   }
 }

@@ -2,8 +2,7 @@ const express = require("express");
 const route = express.Router();
 const multer = require("multer");
 const path = require("path");
-
-let userService = require("../services/user.service");
+const db = require("../database/db");
 
 //Set Storage Engine for User's Avatar
 const storageAvatar = multer.diskStorage({
@@ -18,15 +17,19 @@ const storageAvatar = multer.diskStorage({
 
 const uploadAvatar = multer({
   storage: storageAvatar,
-  limits: { fileSize: 1000000 }
+  limits: { fileSize: 1000000 },
 });
 
 route.get("/", async (req, res) => {
-  const users = await userService.getAll();
-  res.render("vwUser/index", {
-    layout: "admin.hbs",
-    manageUsers: true,
-    users,
+  const userRef = db.database().ref("Users/");
+  userRef.on("value", (snapshot) => {
+    users = snapshot.val();
+    console.log(users);
+    res.render("vwUser/index", {
+      layout: "admin.hbs",
+      manageUsers: true,
+      users,
+    });
   });
 });
 
@@ -39,7 +42,7 @@ route.get("/add", async (req, res) => {
 
 route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
   let imgPath;
-  if(req.file === undefined) {
+  if (req.file === undefined) {
     imgPath = "";
   } else {
     imgPath = "/public/images/avatars/" + req.file.filename;
@@ -53,30 +56,27 @@ route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
   };
   console.log(user);
 
-  await userService.add(user);
+  // await userService.add(user);
   res.redirect("/admin/users");
-  // userService
-  //   .add(user)
-  //   .then((data) => {
-  //     res.redirect("/admin/users/add");
-  //   })
-  //   .catch((err) => res.send(err));
 });
 
 route.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
-  const user = await userService.getOneById(id);
-  console.log(user);
-  res.render("vwUser/edit.hbs", {
-    layout: "admin.hbs",
-    manageUsers: true,
-    user,
+  const userRef = db.database().ref("/Users/" + id);
+  userRef.on("value", (snapshot) => {
+    const user = snapshot.val();
+    console.log(user);
+    res.render("vwUser/edit.hbs", {
+      layout: "admin.hbs",
+      manageUsers: true,
+      user,
+    });
   });
 });
 
 route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
   let imgPath;
-  if(req.file === undefined) {
+  if (req.file === undefined) {
     imgPath = req.body.previewAvatar;
   } else {
     imgPath = "/public/images/avatars/" + req.file.filename;
@@ -86,7 +86,7 @@ route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
     name: req.body.name,
   };
   console.log(user);
-  await userService.update(req.body.id, user);
+  // await userService.update(req.body.id, user);
   res.redirect("/admin/users");
 });
 
