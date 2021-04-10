@@ -3,6 +3,7 @@ const route = express.Router();
 const multer = require("multer");
 const path = require("path");
 const db = require("../database/db");
+const checkAuthen = require("../authentication/check")
 
 //Set Storage Engine for artist's Avatar
 const storageAvatar = multer.diskStorage({
@@ -20,7 +21,7 @@ const uploadAvatar = multer({
   limits: { fileSize: 1000000 },
 });
 
-route.get("/", async (req, res) => {
+route.get("/", checkAuthen, async (req, res) => {
   const artistRef = db.database().ref("Artists/");
   artistRef.on("value", (snapshot) => {
     artists = snapshot.val();
@@ -33,14 +34,14 @@ route.get("/", async (req, res) => {
   });
 });
 
-route.get("/add", async (req, res) => {
+route.get("/add", checkAuthen, async (req, res) => {
   res.render("vwartist/add.hbs", {
     layout: "admin.hbs",
     manageArtists: true,
   });
 });
 
-route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
+route.post("/add", checkAuthen, uploadAvatar.single("avatar"), async (req, res) => {
   let imgPath;
   if (req.file === undefined) {
     imgPath = "";
@@ -73,7 +74,7 @@ route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
   res.redirect("/admin/artists");
 });
 
-route.get("/edit/:id", async (req, res) => {
+route.get("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
   const artistRef = db.database().ref("Artists/" + id);
   artistRef.on("value", (snapshot) => {
@@ -87,7 +88,7 @@ route.get("/edit/:id", async (req, res) => {
   });
 });
 
-route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
+route.post("/edit/:id", checkAuthen, uploadAvatar.single("avatar"), async (req, res) => {
   // var imagesRef = storageRef.child('images/avatars/');
   const id = req.params.id;
 

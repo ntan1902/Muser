@@ -7,7 +7,6 @@ module.exports = function(app) {
             categories = snapshot.val();
             res.locals.listCategories = categories;
         });
-        console.log("locals mdw");
         next();
       });
 };

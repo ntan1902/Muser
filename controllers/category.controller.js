@@ -1,15 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
+const checkAuthen = require("../authentication/check")
 
-router.get("/", async function (req, res) {
+router.get("/", checkAuthen, async function (req, res) {
   res.render("vwCategory/index", {
     layout:"admin.hbs",
     manageCategories:true
   })
 });
 
-router.get("/edit/:id", async function (req, res) {
+router.get("/edit/:id", checkAuthen, async function (req, res) {
   const id = req.params.id;
   const categoryRef = db.database().ref("/Categories/" + id);
 
@@ -23,7 +24,7 @@ router.get("/edit/:id", async function (req, res) {
   });
 });
 
-router.post("/edit/:id", async function (req, res) {
+router.post("/edit/:id", checkAuthen, async function (req, res) {
   const id = req.params.id;
   db.database()
     .ref("/Categories/" + id)
@@ -43,13 +44,13 @@ router.post("/edit/:id", async function (req, res) {
   res.redirect("/admin/categories");
 });
 
-router.get("/add", function (req, res) {
+router.get("/add", checkAuthen, function (req, res) {
   res.render("vwCategory/add", {
     layout: "admin.hbs",
   });
 });
 
-router.post("/add", async function (req, res) {
+router.post("/add", checkAuthen, async function (req, res) {
   var newKey = db.database().ref().child("/Categories").push().key;
   db.database()
     .ref("/Categories/" + newKey)
