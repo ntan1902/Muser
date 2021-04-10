@@ -40,29 +40,27 @@ route.get("/add", async (req, res) => {
   });
 });
 
-route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
-  let imgPath;
-  if (req.file === undefined) {
-    imgPath = "";
-  } else {
-    imgPath = "/public/images/avatars/" + req.file.filename;
-  }
-  const user = {
-    email: req.body.email,
-    password: req.body.password,
-    name: req.body.name,
-    avatar: imgPath,
-    is_admin: false,
-  };
-  console.log(user);
+// route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
+//   let imgPath;
+//   if (req.file === undefined) {
+//     imgPath = "";
+//   } else {
+//     imgPath = "/public/images/avatars/" + req.file.filename;
+//   }
+//   const user = {
+//     email: req.body.email,
+//     password: req.body.password,
+//     name: req.body.name,
+//     avatar: imgPath,
+//     is_admin: false,
+//   };
 
-  // await userService.add(user);
-  res.redirect("/admin/users");
-});
+//   res.redirect("/admin/users");
+// });
 
 route.get("/edit/:id", async (req, res) => {
   const id = req.params.id;
-  const userRef = db.database().ref("/Users/" + id);
+  const userRef = db.database().ref("Users/" + id);
   userRef.on("value", (snapshot) => {
     const user = snapshot.val();
     console.log(user);
@@ -75,17 +73,36 @@ route.get("/edit/:id", async (req, res) => {
 });
 
 route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
+
+  // var imagesRef = storageRef.child('images/avatars/');
+  const id = req.params.id;
+
   let imgPath;
   if (req.file === undefined) {
     imgPath = req.body.previewAvatar;
   } else {
     imgPath = "/public/images/avatars/" + req.file.filename;
   }
+
   const user = {
-    avatar: imgPath,
-    name: req.body.name,
+    imageURL: imgPath,
+    userName: req.body.name,
+    email: req.body.email,
   };
   console.log(user);
+  
+  db.database().ref("Users/" + id).update({
+    email: user.email,
+    // imageURL: user.imageURL,
+    userName: user.userName,
+  }, (err) => {
+    if(err) {
+      console.log("Update failed");
+    } else {
+      console.log("Update success !");
+    }
+  });
+  
   // await userService.update(req.body.id, user);
   res.redirect("/admin/users");
 });
