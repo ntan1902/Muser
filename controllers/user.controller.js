@@ -3,21 +3,19 @@ const route = express.Router();
 const multer = require("multer");
 const path = require("path");
 const db = require("../database/db");
+const sharp = require("sharp");
 
 //Set Storage Engine for User's Avatar
-const storageAvatar = multer.diskStorage({
-  destination: "./public/images/avatars",
-  filename: function (req, file, callback) {
-    callback(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
+const upload = multer({
+  limits: {
+    fileSize: 1000000, //10 MB
   },
-});
-
-const uploadAvatar = multer({
-  storage: storageAvatar,
-  limits: { fileSize: 1000000 },
+  fileFilter(req, file, callback) {
+    if (!file.originalname.match(/\.(jpg|png|jpeg)$/)) {
+      return callback(new Error("Please upload an photo"));
+    }
+    callback(undefined, true);
+  },
 });
 
 route.get("/", async (req, res) => {
@@ -40,13 +38,22 @@ route.get("/add", async (req, res) => {
   });
 });
 
-route.post("/add", uploadAvatar.single("avatar"), async (req, res) => {
-
+route.post("/add", upload.single("avatar"), async (req, res) => {
   let imgPath;
   if (req.file === undefined) {
-    imgPath = "";
+    imgPath = "default";
   } else {
-    imgPath = "/public/images/users/" + req.file.filename;
+    const buffer = await sharp(req.file.buffer)
+    .resize({ width: 200, height: 200 })
+    .png()
+    .toBuffer();
+
+    var storageRef = firebase.storage().ref("images/avatars/");
+    storageRef.put(buffer.toString("base64")).then((snapshot) => {
+      console.log("Upload image successful !");
+      imgPath = snapshot.getDownloadURL();
+      console.log(snapshot.getDownloadURL());
+    })
   }
 
   const new_user = {
@@ -101,7 +108,7 @@ route.get("/edit/:id", async (req, res) => {
   });
 });
 
-route.post("/edit/:id", uploadAvatar.single("avatar"), async (req, res) => {
+route.post("/edit/:id", upload.single("avatar"), async (req, res) => {
 
   // var imagesRef = storageRef.child('images/avatars/');
   const id = req.params.id;
