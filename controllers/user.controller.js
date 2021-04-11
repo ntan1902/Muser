@@ -6,8 +6,6 @@ const db = require("../database/db");
 const sharp = require("sharp");
 const checkAuthen = require("../authentication/check");
 
-// const storage = db.storage("gs://tinmuser.appspot.com");
-
 //Set Storage Engine for User's Avatar
 const upload = multer({
   limits: {
@@ -117,7 +115,7 @@ route.post("/edit/:id", checkAuthen, upload.single("avatar"), async (req, res) =
   // var imagesRef = storageRef.child('images/avatars/');
   const id = req.params.id;
 
-  let imgPath;
+  var imgPath;
   if (req.file === undefined) {
     imgPath = "default";
   } else {
@@ -125,7 +123,7 @@ route.post("/edit/:id", checkAuthen, upload.single("avatar"), async (req, res) =
       .resize({ width: 200, height: 200 })
       .png()
       .toBuffer();
-    console.log(buffer);
+    console.log("buffer: " + buffer);
     var storageRef = db
       .storage()
       .ref("images/avatars/")
@@ -149,7 +147,7 @@ route.post("/edit/:id", checkAuthen, upload.single("avatar"), async (req, res) =
     .update(
       {
         email: user.email,
-        // imageURL: user.imageURL,
+        imageURL: user.imageURL,
         userName: user.userName,
       },
       (err) => {
