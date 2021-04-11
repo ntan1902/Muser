@@ -1,13 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../database/db");
-const checkAuthen = require("../authentication/check")
+const checkAuthen = require("../authentication/check");
 
 router.get("/", checkAuthen, async function (req, res) {
   res.render("vwCategory/index", {
-    layout:"admin.hbs",
-    manageCategories:true
-  })
+    layout: "admin.hbs",
+    manageCategories: true,
+  });
 });
 
 router.get("/edit/:id", checkAuthen, async function (req, res) {
@@ -30,7 +30,7 @@ router.post("/edit/:id", checkAuthen, async function (req, res) {
     .ref("/Categories/" + id)
     .update(
       {
-        categoryName: req.body.categoryName,
+        name: req.body.name,
       },
       (err) => {
         if (err) {
@@ -57,7 +57,7 @@ router.post("/add", checkAuthen, async function (req, res) {
     .set(
       {
         id: newKey,
-        categoryName: req.body.categoryName,
+        name: req.body.name,
       },
       (err) => {
         if (err) {
