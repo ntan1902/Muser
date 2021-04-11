@@ -7,6 +7,12 @@ module.exports = function(app) {
             categories = snapshot.val();
             res.locals.listCategories = categories;
         });
+
+        const artistRef = db.database().ref("/Artists/");
+        artistRef.on("value", (snapshot) => {
+            artists = snapshot.val();
+            res.locals.listArtists = artists;
+        })
         next();
       });
 };

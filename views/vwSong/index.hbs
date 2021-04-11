@@ -16,7 +16,7 @@
                 <tr>
                     <th>#</th>
                     <th>Song Name</th>
-                    <th>Uri</th>
+                    <th style="max-width: 300px;">Uri</th>
                     <th>Category ID</th>
                     <th>Artist ID</th>
                     <th>Edit</th>
@@ -27,7 +27,7 @@
                 <tr>
                     <th>#</th>
                     <th>Song Name</th>
-                    <th>Uri</th>
+                    <th style="max-width: 300px;">Uri</th>
                     <th>Category ID</th>
                     <th>Artist ID</th>
                     <th>Edit</th>
@@ -38,8 +38,8 @@
                 {{#each this.songs}}
                 <tr>
                     <th scope="row">{{id}}</th>
-                    <td>{{songName}}</td>
-                    <td>{{uri}}</td>
+                    <td>{{name}}</td>
+                    <td style="max-width: 300px;">{{uri}}</td>
                     <td>{{categoryId}}</td>
                     <td>{{artistId}}</td>
                     <td>

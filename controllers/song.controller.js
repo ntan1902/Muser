@@ -25,7 +25,6 @@ route.get("/", checkAuthen, async (req, res) => {
   const songRef = db.database().ref("Songs/");
   songRef.on("value", (snapshot) => {
     songs = snapshot.val();
-    console.log(songs);
     res.render("vwSong/index", {
       layout: "admin.hbs",
       manageSongs: true,
@@ -55,9 +54,12 @@ route.post(
     const new_song = {
       name: req.body.name,
       uri: req.body.uri,
+      imageURL: imgPath,
       categoryId: req.body.categoryId,
-      artistId: req.body.artistId
+      artistId: req.body.artistId,
     };
+
+    console.log(new_song);
 
     var newKey = db.database().ref().child("/Songs").push().key;
     db.database()
@@ -67,8 +69,9 @@ route.post(
           id: newKey,
           name: new_song.name,
           uri: new_song.uri,
+          imageURL: new_song.imageURL,
           categoryId: new_song.categoryId,
-          artistId: new_song.artistId
+          artistId: new_song.artistId,
         },
         (err) => {
           if (err) {
@@ -78,7 +81,6 @@ route.post(
           }
         }
       );
-
     res.redirect("/admin/songs");
   }
 );
@@ -116,7 +118,7 @@ route.post(
       name: req.body.name,
       uri: req.body.uri,
       categoryId: req.body.categoryId,
-      artistId: req.body.artistId
+      artistId: req.body.artistId,
     };
 
     db.database()
@@ -126,7 +128,7 @@ route.post(
           name: edit_song.name,
           uri: edit_song.uri,
           categoryId: edit_song.categoryId,
-          artistId: edit_song.artistId
+          artistId: edit_song.artistId,
         },
         (err) => {
           if (err) {
