@@ -79,10 +79,23 @@
                         <input type="text" class="form-control" id="txtLink" name="link">
                     </div>
                     <div class="form-group">
-                        <label for="txtName">Category ID</label>
-                        <input type="text" class="form-control" id="txtCategoryId" name="categoryId">
+                        <label for="txtCategoryId" class="my-1 ml-3">Category</label>
+                        <select name='categoryId' id="txtCategoryId">
+                            <option selected>Choose your option</option>
+                            {{#each listCategories}}
+                            <option value="{{id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
                     </div>
-
+                    <div class="form-group">
+                        <label for="txtArtistId" class="my-1 ml-3">Artist</label>
+                        <select name='artistId' id="txtArtistId">
+                            <option selected>Choose your option</option>
+                            {{#each listArtists}}
+                            <option value="{{id}}">{{name}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
                 </div>
             </div>
             <div class="card-footer">

@@ -54,8 +54,9 @@ route.post(
     }
     const new_song = {
       name: req.body.name,
-      link: req.body.link,
+      uri: req.body.uri,
       categoryId: req.body.categoryId,
+      artistId: req.body.artistId
     };
 
     var newKey = db.database().ref().child("/Songs").push().key;
@@ -65,8 +66,9 @@ route.post(
         {
           id: newKey,
           name: new_song.name,
-          link: new_song.link,
+          uri: new_song.uri,
           categoryId: new_song.categoryId,
+          artistId: new_song.artistId
         },
         (err) => {
           if (err) {
@@ -112,8 +114,9 @@ route.post(
 
     const edit_song = {
       name: req.body.name,
-      link: req.body.link,
+      uri: req.body.uri,
       categoryId: req.body.categoryId,
+      artistId: req.body.artistId
     };
 
     db.database()
@@ -121,8 +124,9 @@ route.post(
       .update(
         {
           name: edit_song.name,
-          link: edit_song.link,
+          uri: edit_song.uri,
           categoryId: edit_song.categoryId,
+          artistId: edit_song.artistId
         },
         (err) => {
           if (err) {

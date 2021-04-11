@@ -77,17 +77,34 @@
 
             <div class="form-group">
                 <label for="txtEmail">Name</label>
-                <input type="text" class="form-control" id="txtName" name="name" value="{{this.song.songName}}" >
+                <input type="text" class="form-control" id="txtName" name="name" value="{{this.song.name}}" >
             </div>
 
             <div class="form-group">
                 <label for="txtName">Link</label>
-                <input type="text" class="form-control" id="txtLink" name="link" value="{{this.song.link}}">
+                <input type="text" class="form-control" id="txtLink" name="link" value="{{this.song.uri}}">
             </div>
 
             <div class="form-group">
-                <label for="txtName">Category ID</label>
-                <input type="text" class="form-control" id="txtCategoryId" name="categoryId" value="{{this.song.categoryId}}">
+                <label for="txtCategory" class="my-1 ml-3"><b>Category ID</b></label>
+                <input type="hidden" class="form-control" id="txtCategoryIdTemp" name="categoryIdTemp"
+                    value="{{this.song.categoryId}}">
+                <select name='categoryId' id="txtCategoryId" value="{{this.song.categoryId}}">
+                    {{#each listCategories}}
+                    <option value="{{id}}" style="text-transform: capitalize;">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="txtArtist" class="my-1 ml-3"><b>Artist ID</b></label>
+                <input type="hidden" class="form-control" id="txtArtistIdTemp" name="artistIdTemp"
+                    value="{{this.song.artistId}}">
+                <select name='artistId' id="txtArtistId" value="{{this.song.artistId}}">
+                    {{#each listArtists}}
+                    <option value="{{id}}" style="text-transform: capitalize;">{{name}}</option>
+                    {{/each}}
+                </select>
             </div>
 
         </div>

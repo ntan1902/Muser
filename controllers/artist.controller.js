@@ -49,7 +49,7 @@ route.post("/add", checkAuthen, uploadAvatar.single("avatar"), async (req, res) 
     imgPath = "/public/images/avatars/" + req.file.filename;
   }
   const new_artist = {
-    artistName: req.body.artistName,
+    name: req.body.name,
     imageURL: imgPath
   };
 
@@ -59,7 +59,7 @@ route.post("/add", checkAuthen, uploadAvatar.single("avatar"), async (req, res) 
     .set(
       {
         id: newKey,
-        artistName: new_artist.artistName,
+        name: new_artist.name,
         imageURL: imgPath
       },
       (err) => {
@@ -100,7 +100,7 @@ route.post("/edit/:id", checkAuthen, uploadAvatar.single("avatar"), async (req, 
   }
 
   const edit_artist = {
-    artistName: req.body.name,
+    name: req.body.name,
     imageURL: imgPath
   };
 
@@ -108,7 +108,7 @@ route.post("/edit/:id", checkAuthen, uploadAvatar.single("avatar"), async (req, 
     .ref("Artists/" + id)
     .update(
       {
-        artistName: edit_artist.artistName,
+        name: edit_artist.name,
         imageURL: imgPath
       },
       (err) => {

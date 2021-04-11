@@ -1,5 +1,5 @@
 {{#section 'js'}}
-    <script src="/public/js/main.js"></script>
+<script src="/public/js/main.js"></script>
 {{/section}}
 <div class="card shadow">
 
@@ -16,8 +16,9 @@
                 <tr>
                     <th>#</th>
                     <th>Song Name</th>
-                    <th>Link</th>
+                    <th>Uri</th>
                     <th>Category ID</th>
+                    <th>Artist ID</th>
                     <th>Edit</th>
                 </tr>
             </thead>
@@ -26,26 +27,28 @@
                 <tr>
                     <th>#</th>
                     <th>Song Name</th>
-                    <th>Link</th>
+                    <th>Uri</th>
                     <th>Category ID</th>
+                    <th>Artist ID</th>
                     <th>Edit</th>
                 </tr>
             </tfoot>
 
             <tbody>
                 {{#each this.songs}}
-                    <tr>
-                        <th scope="row">{{id}}</th>
-                        <td>{{songName}}</td>
-                        <td>{{link}}</td>
-                        <td>{{categoryId}}</td>
-                        <td>
-                            <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
-                                role="button">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <th scope="row">{{id}}</th>
+                    <td>{{songName}}</td>
+                    <td>{{uri}}</td>
+                    <td>{{categoryId}}</td>
+                    <td>{{artistId}}</td>
+                    <td>
+                        <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
+                            role="button">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
                 {{/each}}
             </tbody>
 
