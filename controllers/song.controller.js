@@ -75,16 +75,24 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
 
-  let imgPath;
-  if (req.file === undefined) {
-    imgPath = req.body.previewAvatar;
+  var link_avatar, link_uri;
+  if(req.body.avatar == ""){
+    link_avatar = req.body.previewAvatar;
   } else {
-    imgPath = "/public/images/avatars/" + req.file.filename;
+    link_avatar = req.body.avatar;
   }
+
+  if(req.body.uri == ""){
+    link_uri = req.body.previewUri;
+  } else {
+    link_uri = req.body.uri;
+  }
+
 
   const edit_song = {
     name: req.body.name,
-    uri: req.body.uri,
+    uri: link_uri,
+    imageURL: link_avatar,
     categoryId: req.body.categoryId,
     artistId: req.body.artistId,
   };
@@ -95,6 +103,7 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
       {
         name: edit_song.name,
         uri: edit_song.uri,
+        imageURL: edit_song.imageURL,
         categoryId: edit_song.categoryId,
         artistId: edit_song.artistId,
       },
