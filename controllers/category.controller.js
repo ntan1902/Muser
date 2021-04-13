@@ -14,7 +14,7 @@ router.get("/edit/:id", checkAuthen, async function (req, res) {
   const id = req.params.id;
   const categoryRef = db.database().ref("/Categories/" + id);
 
-  categoryRef.on("value", (snapshot) => {
+  await categoryRef.on("value", (snapshot) => {
     category = snapshot.val();
     res.render("vwCategory/edit", {
       layout: "admin.hbs",
@@ -26,7 +26,7 @@ router.get("/edit/:id", checkAuthen, async function (req, res) {
 
 router.post("/edit/:id", checkAuthen, async function (req, res) {
   const id = req.params.id;
-  db.database()
+  await db.database()
     .ref("/Categories/" + id)
     .update(
       {
@@ -52,7 +52,7 @@ router.get("/add", checkAuthen, function (req, res) {
 
 router.post("/add", checkAuthen, async function (req, res) {
   var newKey = db.database().ref().child("/Categories").push().key;
-  db.database()
+  await db.database()
     .ref("/Categories/" + newKey)
     .set(
       {

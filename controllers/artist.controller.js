@@ -1,29 +1,12 @@
 const express = require("express");
 const route = express.Router();
-const multer = require("multer");
 const path = require("path");
 const db = require("../database/db");
 const checkAuthen = require("../authentication/check")
 
-//Set Storage Engine for artist's Avatar
-const storageAvatar = multer.diskStorage({
-  destination: "./public/images/avatars",
-  filename: function (req, file, callback) {
-    callback(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-
-const uploadAvatar = multer({
-  storage: storageAvatar,
-  limits: { fileSize: 1000000 },
-});
-
 route.get("/", checkAuthen, async (req, res) => {
   const artistRef = db.database().ref("Artists/");
-  artistRef.on("value", (snapshot) => {
+  await artistRef.on("value", (snapshot) => {
     artists = snapshot.val();
     console.log(artists);
     res.render("vwartist/index", {
@@ -41,25 +24,19 @@ route.get("/add", checkAuthen, async (req, res) => {
   });
 });
 
-route.post("/add", checkAuthen, uploadAvatar.single("avatar"), async (req, res) => {
-  let imgPath;
-  if (req.file === undefined) {
-    imgPath = "";
-  } else {
-    imgPath = "/public/images/avatars/" + req.file.filename;
+route.post("/add", checkAuthen, async (req, res) => {
+  var imgPath = req.body.avatar;
+  if(imgPath == "") {
+    imgPath = "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549"
   }
-  const new_artist = {
-    name: req.body.name,
-    imageURL: imgPath
-  };
 
   var newKey = db.database().ref().child("/artists").push().key;
-  db.database()
+  await db.database()
     .ref("/Artists/" + newKey)
     .set(
       {
         id: newKey,
-        name: new_artist.name,
+        name: req.body.name,
         imageURL: imgPath
       },
       (err) => {
@@ -77,7 +54,7 @@ route.post("/add", checkAuthen, uploadAvatar.single("avatar"), async (req, res) 
 route.get("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
   const artistRef = db.database().ref("Artists/" + id);
-  artistRef.on("value", (snapshot) => {
+  await artistRef.on("value", (snapshot) => {
     const artist = snapshot.val();
     console.log(artist);
     res.render("vwartist/edit.hbs", {
@@ -88,27 +65,19 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
   });
 });
 
-route.post("/edit/:id", checkAuthen, uploadAvatar.single("avatar"), async (req, res) => {
-  // var imagesRef = storageRef.child('images/avatars/');
-  const id = req.params.id;
-
-  let imgPath;
-  if (req.file === undefined) {
-    imgPath = req.body.previewAvatar;
-  } else {
-    imgPath = "/public/images/avatars/" + req.file.filename;
+route.post("/edit/:id", checkAuthen, async (req, res) => {
+  const id =  req.params.id;
+  var previewPath = req.body.previewAvatar;
+  var imgPath = req.body.avatar;
+  if(imgPath == "") {
+    imgPath = previewPath;
   }
 
-  const edit_artist = {
-    name: req.body.name,
-    imageURL: imgPath
-  };
-
-  db.database()
+  await db.database()
     .ref("Artists/" + id)
     .update(
       {
-        name: edit_artist.name,
+        name: req.body.name,
         imageURL: imgPath
       },
       (err) => {

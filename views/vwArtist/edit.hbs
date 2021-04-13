@@ -1,26 +1,27 @@
 {{#section 'css'}}
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
 
 {{/section}}
 
 {{#section 'js'}}
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
-    {{!-- File Upload> --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+{{!-- File Upload> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
 
-    <script>
-        $('#txtAvatar').fileinput({
-            theme: 'fa',
-            allowedFileExtensions: ['jpg', 'png'],
-            dropZoneEnabled: false,
-        });
+<script>
+    $('#fileAvatar').fileinput({
+        theme: 'fa',
+        allowedFileExtensions: ['jpg', 'png'],
+        dropZoneEnabled: false,
+    });
+</script>
+{{!-- < File Upload --}}<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
     </script>
-    {{!-- < File Upload --}}
     <script>
 
         $('#frmEdit').on('submit', function (e) {
@@ -28,7 +29,7 @@
 
             const name = $('#txtName').val();
 
-             if (name.length === 0) {
+            if (name.length === 0) {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Invalid Name',
@@ -50,45 +51,93 @@
             }
         })
     </script>
+    {{!-- Firebase-Storage --}}
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
 
-{{/section}}
-<form id="frmEdit" method="POST" action="" enctype="multipart/form-data">
+    <script>
+        var firebaseConfig = {
+            apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
+            authDomain: "tinmuser.firebaseapp.com",
+            databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
+            projectId: "tinmuser",
+            storageBucket: "tinmuser.appspot.com",
+            messagingSenderId: "963218315977",
+            appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
+        };
+        firebase.initializeApp(firebaseConfig);
+        console.log(firebase);
+
+        function uploadImage() {
+            const ref = firebase.storage().ref();
+
+            const image_file = document.querySelector("#fileAvatar").files[0];
+
+            const fname = Date.now() + '-' + image_file.name;
+
+            const metadata = {
+                contentType: image_file.type
+            }
+
+            const task = ref.child("images/artists/" + fname).put(image_file, metadata);
+            task
+                .then(snapshot => snapshot.ref.getDownloadURL())
+                .then(url => {
+                    console.log(url);
+                    $("#txtAvatar").val(url);
+                    alert("Image Upload success !!");
+                })
+        }
+    </script>
+    {{/section}}
     <div class="card">
         <div class="card-header">
-            <h4>Artist</h4>
+            <h4>New Artist's File</h4>
         </div>
         <div class="card-body">
             <div class="form-group">
-                <label for="txtID">#</label>
-                <input type="text" class="form-control" id="txtID" name="id" readonly value="{{this.artist.id}}">
+                <label for="fileAvatar">Avatar</label>
+                <input type="file" class="form-control-file" id="fileAvatar">
             </div>
-
-            <div class="form-group">
-                <label>Preview Avatar</label> <br>
-                <img style="width: 200px;" src="{{this.artist.imageURL}}" alt="no preview image found">
-            </div>
-            <input type="hidden" value="{{this.artist.imageURL}}" name="previewAvatar">
-
-            <div class="form-group">
-                <label for="txtAvatar">New Avatar</label>
-                <input type="file" class="form-control-file" id="txtAvatar" name="avatar">
-            </div>
-
-            <div class="form-group">
-                <label for="txtEmail">Name</label>
-                <input type="text" class="form-control" id="txtName" name="name" value="{{this.artist.name}}" >
-            </div>
-
-        </div>
-        <div class="card-footer">
-            <a class="btn btn-primary" href="/admin/artists" role="button">
-                <i class="fa fa-backward" aria-hidden="true"></i>
-                Back to List
-            </a>
-            <button class="btn btn-success" type="submit">
+            <button class="btn btn-success" onclick="uploadImage()">
                 <i class="fa fa-check" aria-hidden="true"></i>
-                Save
+                Upload Image
             </button>
         </div>
     </div>
-</form>
+    <form id="frmEdit" method="POST" action="">
+        <div class="card">
+            <div class="card-header">
+                <h4>Artist</h4>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="txtID">#</label>
+                    <input type="text" class="form-control" id="txtID" name="id" readonly value="{{this.artist.id}}">
+                </div>
+
+                <div class="form-group">
+                    <label>Preview Avatar</label> <br>
+                    <img style="width: 200px;" src="{{this.artist.imageURL}}" alt="no preview image found">
+                </div>
+                <input type="hidden" value="{{this.artist.imageURL}}" name="previewAvatar">
+                <input type="hidden" value="" id="txtAvatar" name="avatar">
+
+                <div class="form-group">
+                    <label for="txtEmail">Name</label>
+                    <input type="text" class="form-control" id="txtName" name="name" value="{{this.artist.name}}">
+                </div>
+
+            </div>
+            <div class="card-footer">
+                <a class="btn btn-primary" href="/admin/artists" role="button">
+                    <i class="fa fa-backward" aria-hidden="true"></i>
+                    Back to List
+                </a>
+                <button class="btn btn-success" type="submit">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </form>

@@ -1,13 +1,12 @@
 const express = require("express");
 const route = express.Router();
-const multer = require("multer");
 const path = require("path");
 const db = require("../database/db");
 const checkAuthen = require("../authentication/check");
 
 route.get("/", checkAuthen, async (req, res) => {
   const songRef = db.database().ref("Songs/");
-  songRef.on("value", (snapshot) => {
+  await songRef.on("value", (snapshot) => {
     songs = snapshot.val();
     res.render("vwSong/index", {
       layout: "admin.hbs",
@@ -36,7 +35,7 @@ route.post("/add", checkAuthen, async (req, res) => {
   console.log(new_song);
 
   var newKey = db.database().ref().child("/Songs").push().key;
-  db.database()
+  await db.database()
     .ref("/Songs/" + newKey)
     .set(
       {
@@ -61,7 +60,7 @@ route.post("/add", checkAuthen, async (req, res) => {
 route.get("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
   const songRef = db.database().ref("Songs/" + id);
-  songRef.on("value", (snapshot) => {
+  await songRef.on("value", (snapshot) => {
     const song = snapshot.val();
     console.log(song);
     res.render("vwSong/edit.hbs", {
@@ -97,7 +96,7 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
     artistId: req.body.artistId,
   };
 
-  db.database()
+  await db.database()
     .ref("Songs/" + id)
     .update(
       {

@@ -1,29 +1,14 @@
 const express = require("express");
 const route = express.Router();
-const multer = require("multer");
 const path = require("path");
 const db = require("../database/db");
-const sharp = require("sharp");
 const checkAuthen = require("../authentication/check");
 
-//Set Storage Engine for User's Avatar
-const upload = multer({
-  limits: {
-    fileSize: 1000000, //10 MB
-  },
-  fileFilter(req, file, callback) {
-    if (!file.originalname.match(/\.(jpg|png|jpeg)$/)) {
-      return callback(new Error("Please upload an photo"));
-    }
-    callback(undefined, true);
-  },
-});
 
 route.get("/", checkAuthen, async (req, res) => {
   const userRef = db.database().ref("Users/");
-  userRef.on("value", (snapshot) => {
+  await userRef.on("value", (snapshot) => {
     users = snapshot.val();
-    console.log(users);
     res.render("vwUser/index", {
       layout: "admin.hbs",
       manageUsers: true,
@@ -39,24 +24,11 @@ route.get("/add", checkAuthen, async (req, res) => {
   });
 });
 
-route.post("/add", checkAuthen, upload.single("avatar"), async (req, res) => {
-  let imgPath;
-  if (req.file === undefined) {
-    imgPath = "default";
-  } else {
-    const buffer = await sharp(req.file.buffer)
-      .resize({ width: 200, height: 200 })
-      .png()
-      .toBuffer();
-    console.log(buffer);
-    const storageRef = storage
-      .ref("images/avatars/")
-      .put(buffer.toString("base64"))
-      .then((snapshot) => {
-        console.log("Upload image successful !");
-        imgPath = snapshot.getDownloadURL();
-        console.log(snapshot.getDownloadURL());
-      });
+route.post("/add", checkAuthen, async (req, res) => {
+  var imgPath = req.body.avatar;
+  if(imgPath == "") {
+    //default image
+    imgPath = "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549"
   }
   const new_user = {
     email: req.body.email,
@@ -64,8 +36,9 @@ route.post("/add", checkAuthen, upload.single("avatar"), async (req, res) => {
     userName: req.body.name,
     imageURL: imgPath,
   };
+  console.log(new_user);
 
-  db.auth()
+  await db.auth()
     .createUserWithEmailAndPassword(new_user.email, new_user.password)
     .then(() => {
       var newKey = db.database().ref().child("/Users").push().key;
@@ -100,7 +73,7 @@ route.post("/add", checkAuthen, upload.single("avatar"), async (req, res) => {
 route.get("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
   const userRef = db.database().ref("Users/" + id);
-  userRef.on("value", (snapshot) => {
+  await userRef.on("value", (snapshot) => {
     const user = snapshot.val();
     console.log(user);
     res.render("vwUser/edit.hbs", {
@@ -111,44 +84,27 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
   });
 });
 
-route.post("/edit/:id", checkAuthen, upload.single("avatar"), async (req, res) => {
-  // var imagesRef = storageRef.child('images/avatars/');
+route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
+  var previewPath = req.body.previewAvatar;
+  var imgPath = req.body.avatar;
 
-  var imgPath;
-  if (req.file === undefined) {
-    imgPath = "default";
-  } else {
-    const buffer = await sharp(req.file.buffer)
-      .resize({ width: 200, height: 200 })
-      .png()
-      .toBuffer();
-    console.log("buffer: " + buffer);
-    var storageRef = db
-      .storage()
-      .ref("images/avatars/")
-      .put(buffer.toString("base64"))
-      .then((snapshot) => {
-        console.log("Upload image successful !");
-        imgPath = snapshot.getDownloadURL();
-        console.log(snapshot.getDownloadURL());
-      });
+  if(imgPath === undefined) {
+    imgPath = previewPath;
   }
 
-  const user = {
+  const edit_user = {
     imageURL: imgPath,
     userName: req.body.name,
-    email: req.body.email,
   };
-  console.log(user);
+  console.log(edit_user);
 
-  db.database()
+  await db.database()
     .ref("Users/" + id)
     .update(
       {
-        email: user.email,
-        imageURL: user.imageURL,
-        userName: user.userName,
+        imageURL: edit_user.imageURL,
+        userName: edit_user.userName,
       },
       (err) => {
         if (err) {
@@ -159,7 +115,6 @@ route.post("/edit/:id", checkAuthen, upload.single("avatar"), async (req, res) =
       }
     );
 
-  // await userService.update(req.body.id, user);
   res.redirect("/admin/users");
 });
 
@@ -167,8 +122,9 @@ route.get("/isUniqueEmail", checkAuthen, async (req, res) => {
   const email = req.query.email;
   const userRef = db.database().ref("/Users");
   const query = userRef.orderByChild("email").equalTo(email);
-  query.on("value", (snapshot) => {
+  await query.once("value", (snapshot) => {
     var data = snapshot.val();
+    console.log(data);
     if (data === null) {
       res.json(true);
     } else {
