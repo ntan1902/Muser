@@ -16,112 +16,114 @@
         dropZoneEnabled: false,
     });
 </script>
-{{!-- < File Upload --}} <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
-    </script>
-    <script>
-        $('#frmRegister').on('submit', function (e) {
-            e.preventDefault();
-            const name = $('#txtArtistName').val();
-
-            if (name.length === 0) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Password',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Your artist has been saved',
-                    showConfirmButton: false,
-                    timer: 1000
-                }).then(function () {
-                    $('#frmRegister').off('submit').submit();
-                });
-            }
-        });
-
-    </script>
-    {{!-- Firebase-Storage --}}
-    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
-
-    <script>
-        var firebaseConfig = {
-            apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
-            authDomain: "tinmuser.firebaseapp.com",
-            databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
-            projectId: "tinmuser",
-            storageBucket: "tinmuser.appspot.com",
-            messagingSenderId: "963218315977",
-            appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
-        };
-        firebase.initializeApp(firebaseConfig);
-        console.log(firebase);
-
-        function uploadImage() {
-            const ref = firebase.storage().ref();
-
-            const image_file = document.querySelector("#fileAvatar").files[0];
-
-            const fname = Date.now() + '-' + image_file.name;
-
-            const metadata = {
-                contentType: image_file.type
-            }
-
-            const task = ref.child("images/artists/" + fname).put(image_file, metadata);
-            task
-                .then(snapshot => snapshot.ref.getDownloadURL())
-                .then(url => {
-                    console.log(url);
-                    $("#txtAvatar").val(url);
-                    alert("Image Upload success !!");
-                })
+<script>
+    $('#frmRegister').on('submit', function (e) {
+        e.preventDefault();
+        const name = $('#txtArtistName').val();
+        if (name.length === 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Name',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        } else if ($('#fileAvatar').get(0).files.length === 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Avatar',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
         }
-    </script>
-    {{/section}}
-    <div class="card">
+        else {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your artist has been saved',
+                showConfirmButton: false,
+                timer: 1000
+            }).then(async function () {
+                await uploadImage();
+                $('#frmRegister').off('submit').submit();
+            });
+        }
+    });
+
+</script>
+{{!-- Firebase-Storage --}}
+<script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
+
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
+        authDomain: "tinmuser.firebaseapp.com",
+        databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
+        projectId: "tinmuser",
+        storageBucket: "tinmuser.appspot.com",
+        messagingSenderId: "963218315977",
+        appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
+    };
+    firebase.initializeApp(firebaseConfig);
+
+    async function uploadImage() {
+        const ref = firebase.storage().ref();
+
+        const image_file = document.querySelector("#fileAvatar").files[0];
+
+        const fname = Date.now() + '-' + image_file.name;
+
+        const metadata = {
+            contentType: image_file.type
+        }
+
+        const task = ref.child("images/artists/" + fname).put(image_file, metadata);
+        await task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url);
+                $("#txtAvatar").val(url);
+                alert("Image Upload success !!");
+            })
+    }
+</script>
+{{/section}}
+<div class="card">
+    <div class="card-header">
+        <h4>Artist's File</h4>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="fileAvatar">Avatar</label>
+            <input type="file" class="form-control-file" id="fileAvatar" required>
+        </div>
+
+    </div>
+</div>
+<form id="frmRegister" method="POST" action="">
+    <div class="card mt-3">
         <div class="card-header">
-            <h4>New User's File</h4>
+            <h4>Artist's Information</h4>
         </div>
         <div class="card-body">
+            <input type="hidden" class="form-control-file" id="txtAvatar" name="avatar">
             <div class="form-group">
-                <label for="fileAvatar">Avatar</label>
-                <input type="file" class="form-control-file" id="fileAvatar">
+                <label for="txtEmail">Name</label>
+                <input type="text" class="form-control" id="txtArtistName" name="name">
             </div>
-            <button class="btn btn-success" onclick="uploadImage()">
-                <i class="fa fa-check" aria-hidden="true"></i>
-                Upload Image
-            </button>
         </div>
     </div>
-    <form id="frmRegister" method="POST" action="">
-        <div class="card">
-            <div class="card-header">
-                <h4>New Artist</h4>
-            </div>
-            <div class="card-body">
-                <input type="hidden" class="form-control-file" id="txtAvatar" name="avatar">
-                <div class="form-group">
-                    <label for="txtEmail">Name</label>
-                    <input type="text" class="form-control" id="txtArtistName" name="name">
-                </div>
-            </div>
-        </div>
-        <div class="card-footer">
-            <a class="btn btn-primary" href="/admin/artists" role="button">
-                <i class="fa fa-backward" aria-hidden="true"></i>
-                Back to List
-            </a>
-            <button class="btn btn-success" type="submit">
-                <i class="fa fa-check" aria-hidden="true"></i>
-                Save
-            </button>
-        </div>
-        </div>
-    </form>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="/admin/artists" role="button">
+            <i class="fa fa-backward" aria-hidden="true"></i>
+            Back to List
+        </a>
+        <button class="btn btn-success" type="submit">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Save
+        </button>
+    </div>
+    </div>
+</form>

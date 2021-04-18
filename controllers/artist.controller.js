@@ -2,7 +2,7 @@ const express = require("express");
 const route = express.Router();
 const path = require("path");
 const db = require("../database/db");
-const checkAuthen = require("../authentication/check")
+const checkAuthen = require("../authentication/check");
 
 route.get("/", checkAuthen, async (req, res) => {
   const artistRef = db.database().ref("Artists/");
@@ -26,18 +26,21 @@ route.get("/add", checkAuthen, async (req, res) => {
 
 route.post("/add", checkAuthen, async (req, res) => {
   var imgPath = req.body.avatar;
-  if(imgPath == "") {
-    imgPath = "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549"
+  console.log("*************" + imgPath);
+  if (imgPath == "") {
+    imgPath =
+      "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549";
   }
 
   var newKey = db.database().ref().child("/artists").push().key;
-  await db.database()
+  await db
+    .database()
     .ref("/Artists/" + newKey)
     .set(
       {
         id: newKey,
         name: req.body.name,
-        imageURL: imgPath
+        imageURL: imgPath,
       },
       (err) => {
         if (err) {
@@ -66,19 +69,20 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 });
 
 route.post("/edit/:id", checkAuthen, async (req, res) => {
-  const id =  req.params.id;
+  const id = req.params.id;
   var previewPath = req.body.previewAvatar;
   var imgPath = req.body.avatar;
-  if(imgPath == "") {
+  if (imgPath == "") {
     imgPath = previewPath;
   }
 
-  await db.database()
+  await db
+    .database()
     .ref("Artists/" + id)
     .update(
       {
         name: req.body.name,
-        imageURL: imgPath
+        imageURL: imgPath,
       },
       (err) => {
         if (err) {
