@@ -23,187 +23,185 @@
         dropZoneEnabled: false,
     });
 </script>
-{{!-- < File Upload --}} <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
-    </script>
 
-    <script>
-        $("#txtCategoryId").val($("#txtCategoryIdTemp").val());
-        $("#txtArtistId").val($("#txtArtistIdTemp").val());
+<script>
+    $("#txtCategoryId").val($("#txtCategoryIdTemp").val());
+    $("#txtArtistId").val($("#txtArtistIdTemp").val());
 
-        $('#frmEdit').on('submit', function (e) {
-            e.preventDefault();
-            const name = $('#txtName').val();
-            const categoryId = $('#txtCategoryId').val();
+    $('#frmEdit').on('submit', function (e) {
+        e.preventDefault();
+        const name = $('#txtName').val();
+        const categoryId = $('#txtCategoryId').val();
 
-            if (name.length === 0) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Name',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Change successfully',
-                    showConfirmButton: false,
-                    timer: 1000
-                }).then(function () {
-                    $('#frmEdit').off('submit').submit();
-                });
+        if (name.length === 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Name',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Change successfully',
+                showConfirmButton: false,
+                timer: 1000
+            }).then(function () {
+                $('#frmEdit').off('submit').submit();
+            });
 
-            }
-        })
-    </script>
-    {{!-- Firebase-Storage --}}
-    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
+        }
+    })
+</script>
+{{!-- Firebase-Storage --}}
+<script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
 
-    <script>
-        var firebaseConfig = {
-            apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
-            authDomain: "tinmuser.firebaseapp.com",
-            databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
-            projectId: "tinmuser",
-            storageBucket: "tinmuser.appspot.com",
-            messagingSenderId: "963218315977",
-            appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
-        };
-        firebase.initializeApp(firebaseConfig);
-        console.log(firebase);
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
+        authDomain: "tinmuser.firebaseapp.com",
+        databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
+        projectId: "tinmuser",
+        storageBucket: "tinmuser.appspot.com",
+        messagingSenderId: "963218315977",
+        appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
+    };
+    firebase.initializeApp(firebaseConfig);
+    console.log(firebase);
 
-        function uploadImage() {
-            const ref = firebase.storage().ref();
+    function uploadImage() {
+        const ref = firebase.storage().ref();
 
-            const image_file = document.querySelector("#fileAvatar").files[0];
+        const image_file = document.querySelector("#fileAvatar").files[0];
 
-            const fname = Date.now() + '-' + image_file.name;
+        const fname = Date.now() + '-' + image_file.name;
 
-            const metadata = {
-                contentType: image_file.type
-            }
-
-            const task = ref.child("images/songs/" + fname).put(image_file, metadata);
-            task
-                .then(snapshot => snapshot.ref.getDownloadURL())
-                .then(url => {;                    
-                    $("#txtAvatar").val(url);
-                    alert("Image Upload success !!");
-                })
+        const metadata = {
+            contentType: image_file.type
         }
 
-        function uploadUri() {
-            const ref = firebase.storage().ref();
+        const task = ref.child("images/songs/" + fname).put(image_file, metadata);
+        task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                ;
+                $("#txtAvatar").val(url);
+                alert("Image Upload success !!");
+            })
+    }
 
-            const mp3_file = document.querySelector("#fileUri").files[0];
+    function uploadUri() {
+        const ref = firebase.storage().ref();
 
-            const fname = Date.now() + '-' + mp3_file.name;
+        const mp3_file = document.querySelector("#fileUri").files[0];
 
-            const metadata = {
-                contentType: mp3_file.type
-            }
+        const fname = Date.now() + '-' + mp3_file.name;
 
-            const task = ref.child("songs/" + fname).put(mp3_file, metadata);
-            task
-                .then(snapshot => snapshot.ref.getDownloadURL())
-                .then(url => {
-                    $("#txtUri").val(url);
-                    alert("Song upload success !!");
-                })
+        const metadata = {
+            contentType: mp3_file.type
         }
-    </script>
-    {{/section}}
 
+        const task = ref.child("songs/" + fname).put(mp3_file, metadata);
+        task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                $("#txtUri").val(url);
+                alert("Song upload success !!");
+            })
+    }
+</script>
+{{/section}}
+
+<div class="card">
+    <div class="card-header">
+        <h4>New Song Files</h4>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="txtAvatar">New Avatar</label>
+            <input type="file" class="form-control-file" id="fileAvatar" name="avatar">
+        </div>
+        <button class="btn btn-success" onclick="uploadImage()">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Upload Image
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="txtUri">New MP3 File</label>
+            <input type="file" class="form-control-file" id="fileUri" name="uri">
+        </div>
+        <button class="btn btn-success" onclick="uploadUri()">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Upload MP3 File
+        </button>
+    </div>
+</div>
+<form id="frmEdit" method="POST" action="">
     <div class="card">
         <div class="card-header">
-            <h4>New Song Files</h4>
+            <h4>Song</h4>
         </div>
         <div class="card-body">
             <div class="form-group">
-                <label for="txtAvatar">New Avatar</label>
-                <input type="file" class="form-control-file" id="fileAvatar" name="avatar">
+                <label for="txtID">#ID</label>
+                <input type="text" class="form-control" id="txtID" name="id" readonly value="{{this.song.id}}">
             </div>
-            <button class="btn btn-success" onclick="uploadImage()">
-                <i class="fa fa-check" aria-hidden="true"></i>
-                Upload Image
-            </button>
-        </div>
-        <div class="card-body">
+
             <div class="form-group">
-                <label for="txtUri">New MP3 File</label>
-                <input type="file" class="form-control-file" id="fileUri" name="uri">
+                <label>Preview Avatar</label> <br>
+                <img style="width: 200px;" src="{{this.song.imageURL}}" alt="no preview image found">
             </div>
-            <button class="btn btn-success" onclick="uploadUri()">
+            <div class="form-group">
+                <label>Preview Song</label> <br>
+                <audio controls>
+                    <source type="audio/mpeg" src="{{this.song.uri}}" alt="no preview song found">
+                </audio>
+            </div>
+
+            <input type="hidden" value="{{this.song.imageURL}}" name="previewAvatar" id="txtPreviewAvatar">
+            <input type="hidden" value="{{this.song.uri}}" name="previewUri" id="txtPreviewUri">
+
+            <input type="hidden" value="" name="avatar" id="txtAvatar">
+            <input type="hidden" value="" name="uri" id="txtUri">
+
+            <div class="form-group">
+                <label for="txtEmail">Name</label>
+                <input type="text" class="form-control" id="txtName" name="name" value="{{this.song.name}}">
+            </div>
+
+            <div class="form-group d-flex justify-content-between">
+                <label for="txtCategory" class="my-1"><b>Category ID</b></label>
+                <input type="hidden" class="form-control" id="txtCategoryIdTemp" name="categoryIdTemp"
+                    value="{{this.song.categoryId}}">
+                <select name='categoryId' id="txtCategoryId" value="{{this.song.categoryId}}">
+                    {{#each listCategories}}
+                    <option value="{{id}}" style="text-transform: capitalize;">{{name}}</option>
+                    {{/each}}
+                </select>
+                <label for="txtArtist" class="my-1"><b>Artist ID</b></label>
+                <input type="hidden" class="form-control" id="txtArtistIdTemp" name="artistIdTemp"
+                    value="{{this.song.artistId}}">
+                <select name='artistId' id="txtArtistId" value="{{this.song.artistId}}">
+                    {{#each listArtists}}
+                    <option value="{{id}}" style="text-transform: capitalize;">{{name}}</option>
+                    {{/each}}
+                </select>
+            </div>
+
+        </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" href="/admin/users" role="button">
+                <i class="fa fa-backward" aria-hidden="true"></i>
+                Back to List
+            </a>
+            <button class="btn btn-success" type="submit">
                 <i class="fa fa-check" aria-hidden="true"></i>
-                Upload MP3 File
+                Save
             </button>
         </div>
     </div>
-    <form id="frmEdit" method="POST" action="">
-        <div class="card">
-            <div class="card-header">
-                <h4>Song</h4>
-            </div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label for="txtID">#ID</label>
-                    <input type="text" class="form-control" id="txtID" name="id" readonly value="{{this.song.id}}">
-                </div>
-
-                <div class="form-group">
-                    <label>Preview Avatar</label> <br>
-                    <img style="width: 200px;" src="{{this.song.imageURL}}" alt="no preview image found">
-                </div>
-                <div class="form-group">
-                    <label>Preview Song</label> <br>
-                    <audio controls>
-                        <source type="audio/mpeg" src="{{this.song.uri}}" alt="no preview song found">
-                    </audio>
-                </div>
-
-                <input type="hidden" value="{{this.song.imageURL}}" name="previewAvatar" id="txtPreviewAvatar">
-                <input type="hidden" value="{{this.song.uri}}" name="previewUri" id="txtPreviewUri">
-
-                <input type="hidden" value="" name="avatar" id="txtAvatar">
-                <input type="hidden" value="" name="uri" id="txtUri">
-
-                <div class="form-group">
-                    <label for="txtEmail">Name</label>
-                    <input type="text" class="form-control" id="txtName" name="name" value="{{this.song.name}}">
-                </div>
-
-                <div class="form-group d-flex justify-content-between">
-                    <label for="txtCategory" class="my-1"><b>Category ID</b></label>
-                    <input type="hidden" class="form-control" id="txtCategoryIdTemp" name="categoryIdTemp"
-                        value="{{this.song.categoryId}}">
-                    <select name='categoryId' id="txtCategoryId" value="{{this.song.categoryId}}">
-                        {{#each listCategories}}
-                        <option value="{{id}}" style="text-transform: capitalize;">{{name}}</option>
-                        {{/each}}
-                    </select>
-                    <label for="txtArtist" class="my-1"><b>Artist ID</b></label>
-                    <input type="hidden" class="form-control" id="txtArtistIdTemp" name="artistIdTemp"
-                        value="{{this.song.artistId}}">
-                    <select name='artistId' id="txtArtistId" value="{{this.song.artistId}}">
-                        {{#each listArtists}}
-                        <option value="{{id}}" style="text-transform: capitalize;">{{name}}</option>
-                        {{/each}}
-                    </select>
-                </div>
-
-            </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" href="/admin/users" role="button">
-                    <i class="fa fa-backward" aria-hidden="true"></i>
-                    Back to List
-                </a>
-                <button class="btn btn-success" type="submit">
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                    Save
-                </button>
-            </div>
-        </div>
-    </form>
+</form>

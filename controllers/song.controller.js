@@ -6,8 +6,36 @@ const checkAuthen = require("../authentication/check");
 
 route.get("/", checkAuthen, async (req, res) => {
   const songRef = db.database().ref("Songs/");
-  await songRef.on("value", (snapshot) => {
-    songs = snapshot.val();
+  await songRef.on("value", async (snapshot) => {
+    var songs = [];
+
+    for (let song_id in snapshot.val()) {
+      let _songRef = db.database().ref("/Songs/" + song_id);
+
+      var song;
+
+      await _songRef.on("value", (snapshot) => {
+        song = snapshot.val();
+      });
+      console.log("Song: " + song);
+
+      let categoryRef = db.database().ref("/Categories/" + song.categoryId);
+      let artistRef = db.database().ref("/Artists/" + song.artistId);
+
+      await categoryRef.on("value", (snapshot) => {
+        category = snapshot.val();
+        song.category = category.name;
+      });
+
+      await artistRef.on("value", (snapshot) => {
+        artist = snapshot.val();
+        song.artist = artist.name;
+      });
+
+      console.log("After: " + song);
+      songs.push(song);
+    }
+
     res.render("vwSong/index", {
       layout: "admin.hbs",
       manageSongs: true,
@@ -35,7 +63,8 @@ route.post("/add", checkAuthen, async (req, res) => {
   console.log(new_song);
 
   var newKey = db.database().ref().child("/Songs").push().key;
-  await db.database()
+  await db
+    .database()
     .ref("/Songs/" + newKey)
     .set(
       {
@@ -75,18 +104,17 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
 
   var link_avatar, link_uri;
-  if(req.body.avatar == ""){
+  if (req.body.avatar == "") {
     link_avatar = req.body.previewAvatar;
   } else {
     link_avatar = req.body.avatar;
   }
 
-  if(req.body.uri == ""){
+  if (req.body.uri == "") {
     link_uri = req.body.previewUri;
   } else {
     link_uri = req.body.uri;
   }
-
 
   const edit_song = {
     name: req.body.name,
@@ -96,7 +124,8 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
     artistId: req.body.artistId,
   };
 
-  await db.database()
+  await db
+    .database()
     .ref("Songs/" + id)
     .update(
       {

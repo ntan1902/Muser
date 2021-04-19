@@ -23,19 +23,49 @@
             dropZoneEnabled: false,
         });
     </script>
-    {{!-- < File Upload --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
-    </script>
     <script>
         $('#frmRegister').on('submit', function (e) {
             e.preventDefault();
-            const categoryId = $('#txtCategoryId').val();
+            const category = $('#txtCategoryId').val();
+            const artist = $('#txtArtistId').val();
             const name = $('#txtSongName').val();
 
             if (name.length === 0) {
                 Swal.fire({
                     title: 'Error!',
                     text: 'Invalid Song Name',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                })
+                return;
+            } else if (category == "Choose your option") {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid Category',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                })
+                return;
+            } else if (artist == "Choose your option") {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid Artist',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                })
+                return;
+            } else if ($('#fileAvatar').get(0).files.length === 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid Image File',
+                    icon: 'error',
+                    confirmButtonText: 'Retry'
+                })
+                return;
+            } else if ($('#fileUri').get(0).files.length === 0) {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Invalid MP3 File',
                     icon: 'error',
                     confirmButtonText: 'Retry'
                 })
@@ -48,7 +78,9 @@
                     title: 'Your song has been saved',
                     showConfirmButton: false,
                     timer: 1000
-                }).then(function () {
+                }).then(async function () {
+                    await uploadImage();
+                    await uploadUri();
                     $('#frmRegister').off('submit').submit();
                 });
             }
@@ -70,9 +102,8 @@
             appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
         };
         firebase.initializeApp(firebaseConfig);
-        console.log(firebase);
 
-        function uploadImage() {
+        async function uploadImage() {
             const ref = firebase.storage().ref();
 
             const image_file = document.querySelector("#fileAvatar").files[0];
@@ -84,7 +115,7 @@
             }
 
             const task = ref.child("images/songs/" + fname).put(image_file, metadata);
-            task
+            await task
                 .then(snapshot => snapshot.ref.getDownloadURL())
                 .then(url => {
                     console.log(url);
@@ -93,7 +124,7 @@
                 })
         }
 
-        function uploadUri() {
+        async function uploadUri() {
             const ref = firebase.storage().ref();
 
             const mp3_file = document.querySelector("#fileUri").files[0];
@@ -105,7 +136,7 @@
             }
 
             const task = ref.child("songs/" + fname).put(mp3_file, metadata);
-            task
+            await task
                 .then(snapshot => snapshot.ref.getDownloadURL())
                 .then(url => {
                     console.log(url);
@@ -118,34 +149,24 @@
 
 <div class="card">
     <div class="card-header">
-        <h4>New Song Files</h4>
+        <h4>Song Files</h4>
     </div>
     <div class="card-body">
         <div class="form-group">
-            <label for="txtAvatar">Avatar</label>
+            <label for="txtAvatar">Image File</label>
             <input type="file" class="form-control-file" id="fileAvatar" name="avatar">
         </div>
-        <button class="btn btn-success" onclick="uploadImage()">
-            <i class="fa fa-check" aria-hidden="true"></i>
-            Upload Image
-        </button>
-    </div>
-    <div class="card-body">
         <div class="form-group">
             <label for="txtUri">MP3 File</label>
             <input type="file" class="form-control-file" id="fileUri" name="uri">
         </div>
-        <button class="btn btn-success" onclick="uploadUri()">
-            <i class="fa fa-check" aria-hidden="true"></i>
-            Upload MP3 File
-        </button>
     </div>
 </div>
 
 <form id="frmRegister" method="POST" action="">
     <div class="card mt-3">
         <div class="card-header">
-            <h4>New Song</h4>
+            <h4>Song's Information</h4>
         </div>
         <div class="card-body">
             <div class="form-group">
@@ -193,15 +214,16 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer">
-                <a class="btn btn-primary" href="/admin/songs" role="button">
-                    <i class="fa fa-backward" aria-hidden="true"></i>
-                    Back to List
-                </a>
-                <button class="btn btn-success" type="submit">
-                    <i class="fa fa-check" aria-hidden="true"></i>
-                    Save
-                </button>
-            </div>
         </div>
+        <div class="card-footer">
+            <a class="btn btn-primary" href="/admin/songs" role="button">
+                <i class="fa fa-backward" aria-hidden="true"></i>
+                Back to List
+            </a>
+            <button class="btn btn-success" type="submit">
+                <i class="fa fa-check" aria-hidden="true"></i>
+                Save
+            </button>
+        </div>
+    </div>
 </form>
