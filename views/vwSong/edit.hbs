@@ -48,7 +48,14 @@
                 title: 'Change successfully',
                 showConfirmButton: false,
                 timer: 1000
-            }).then(function () {
+            }).then(async function () {
+                if (!($('#fileAvatar').get(0).files.length === 0)) {
+                    await uploadImage();
+                }
+
+                if (!($('#fileUri').get(0).files.length === 0)) {
+                    await uploadUri();
+                }
                 $('#frmEdit').off('submit').submit();
             });
 
@@ -72,7 +79,7 @@
     firebase.initializeApp(firebaseConfig);
     console.log(firebase);
 
-    function uploadImage() {
+    async function uploadImage() {
         const ref = firebase.storage().ref();
 
         const image_file = document.querySelector("#fileAvatar").files[0];
@@ -84,7 +91,7 @@
         }
 
         const task = ref.child("images/songs/" + fname).put(image_file, metadata);
-        task
+        await task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
                 ;
@@ -93,7 +100,7 @@
             })
     }
 
-    function uploadUri() {
+    async function uploadUri() {
         const ref = firebase.storage().ref();
 
         const mp3_file = document.querySelector("#fileUri").files[0];
@@ -105,7 +112,7 @@
         }
 
         const task = ref.child("songs/" + fname).put(mp3_file, metadata);
-        task
+        await task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
                 $("#txtUri").val(url);
@@ -124,26 +131,18 @@
             <label for="txtAvatar">New Avatar</label>
             <input type="file" class="form-control-file" id="fileAvatar" name="avatar">
         </div>
-        <button class="btn btn-success" onclick="uploadImage()">
-            <i class="fa fa-check" aria-hidden="true"></i>
-            Upload Image
-        </button>
-    </div>
-    <div class="card-body">
+
         <div class="form-group">
             <label for="txtUri">New MP3 File</label>
             <input type="file" class="form-control-file" id="fileUri" name="uri">
         </div>
-        <button class="btn btn-success" onclick="uploadUri()">
-            <i class="fa fa-check" aria-hidden="true"></i>
-            Upload MP3 File
-        </button>
+
     </div>
 </div>
 <form id="frmEdit" method="POST" action="">
     <div class="card">
         <div class="card-header">
-            <h4>Song</h4>
+            <h4>Song's Information</h4>
         </div>
         <div class="card-body">
             <div class="form-group">

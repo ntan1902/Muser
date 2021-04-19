@@ -4,7 +4,6 @@ const path = require("path");
 const db = require("../database/db");
 const checkAuthen = require("../authentication/check");
 
-
 route.get("/", checkAuthen, async (req, res) => {
   const userRef = db.database().ref("Users/");
   await userRef.on("value", (snapshot) => {
@@ -26,9 +25,10 @@ route.get("/add", checkAuthen, async (req, res) => {
 
 route.post("/add", checkAuthen, async (req, res) => {
   var imgPath = req.body.avatar;
-  if(imgPath == "") {
+  if (imgPath == "") {
     //default image
-    imgPath = "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549"
+    imgPath =
+      "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549";
   }
   const new_user = {
     email: req.body.email,
@@ -38,7 +38,8 @@ route.post("/add", checkAuthen, async (req, res) => {
   };
   console.log(new_user);
 
-  await db.auth()
+  await db
+    .auth()
     .createUserWithEmailAndPassword(new_user.email, new_user.password)
     .then(() => {
       var newKey = db.database().ref().child("/Users").push().key;
@@ -87,9 +88,11 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
   var previewPath = req.body.previewAvatar;
+  console.log("hello");
+  console.log("previewPath: " + previewPath);
   var imgPath = req.body.avatar;
 
-  if(imgPath === undefined) {
+  if (imgPath == "") {
     imgPath = previewPath;
   }
 
@@ -99,7 +102,8 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
   };
   console.log(edit_user);
 
-  await db.database()
+  await db
+    .database()
     .ref("Users/" + id)
     .update(
       {
@@ -108,9 +112,9 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
       },
       (err) => {
         if (err) {
-          console.log("Update failed");
+          console.log("Updatex failed");
         } else {
-          console.log("Update success !");
+          console.log("Updatex success !");
         }
       }
     );
