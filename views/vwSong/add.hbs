@@ -1,29 +1,30 @@
 {{#section 'css'}}
-<link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
 {{/section}}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
 
 {{#section 'js'}}
-{{!-- File Upload> --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
+    {{!-- File Upload> --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
 
-<script>
-    $('#fileAvatar').fileinput({
-        theme: 'fa',
-        allowedFileExtensions: ['jpg', 'png'],
-        dropZoneEnabled: false,
-    });
+    <script>
+        $('#fileAvatar').fileinput({
+            theme: 'fa',
+            allowedFileExtensions: ['jpg', 'png'],
+            dropZoneEnabled: false,
+        });
 
-    $('#fileUri').fileinput({
-        theme: 'fa',
-        allowedFileExtensions: ['mp3'],
-        dropZoneEnabled: false,
-    });
-</script>
-{{!-- < File Upload --}} <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
+        $('#fileUri').fileinput({
+            theme: 'fa',
+            allowedFileExtensions: ['mp3'],
+            dropZoneEnabled: false,
+        });
+    </script>
+    {{!-- < File Upload --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js">
     </script>
     <script>
         $('#frmRegister').on('submit', function (e) {
@@ -113,64 +114,82 @@
                 })
         }
     </script>
-    {{/section}}
+{{/section}}
 
-    <div class="card">
-        <div class="card-header">
-            <h4>New Song Files</h4>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                <label for="txtAvatar">Avatar</label>
-                <input type="file" class="form-control-file" id="fileAvatar" name="avatar">
-            </div>
-            <button class="btn btn-success" onclick="uploadImage()">
-                <i class="fa fa-check" aria-hidden="true"></i>
-                Upload Image
-            </button>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                <label for="txtUri">MP3 File</label>
-                <input type="file" class="form-control-file" id="fileUri" name="uri">
-            </div>
-            <button class="btn btn-success" onclick="uploadUri()">
-                <i class="fa fa-check" aria-hidden="true"></i>
-                Upload MP3 File
-            </button>
-        </div>
+<div class="card">
+    <div class="card-header">
+        <h4>New Song Files</h4>
     </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="txtAvatar">Avatar</label>
+            <input type="file" class="form-control-file" id="fileAvatar" name="avatar">
+        </div>
+        <button class="btn btn-success" onclick="uploadImage()">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Upload Image
+        </button>
+    </div>
+    <div class="card-body">
+        <div class="form-group">
+            <label for="txtUri">MP3 File</label>
+            <input type="file" class="form-control-file" id="fileUri" name="uri">
+        </div>
+        <button class="btn btn-success" onclick="uploadUri()">
+            <i class="fa fa-check" aria-hidden="true"></i>
+            Upload MP3 File
+        </button>
+    </div>
+</div>
 
-    <form id="frmRegister" method="POST" action="">
-        <div class="card mt-3">
-            <div class="card-header">
-                <h4>New Song</h4>
-            </div>
-            <div class="card-body">
+<form id="frmRegister" method="POST" action="">
+    <div class="card mt-3">
+        <div class="card-header">
+            <h4>New Song</h4>
+        </div>
+        <div class="card-body">
+            <div class="form-group">
+                <input type="hidden" value="default" name="imageURL" id="txtAvatar">
+                <input type="hidden" value="default" name="uri" id="txtUri">
+
                 <div class="form-group">
-                    <input type="hidden" value="default" name="imageURL" id="txtAvatar">
-                    <input type="hidden" value="default" name="uri" id="txtUri">
+                    <label for="txtEmail">Name</label>
+                    <input type="text" class="form-control" id="txtSongName" name="name">
+                </div>
+                <div class="form-group">
+                    <div class="row">
 
-                    <div class="form-group">
-                        <label for="txtEmail">Name</label>
-                        <input type="text" class="form-control" id="txtSongName" name="name">
+                        <div class="col-1">
+                            <label for="txtCategoryId" class="my-1">Category</label>
+                        </div>
+
+                        <div class="col-11">
+                            <select name='categoryId' id="txtCategoryId">
+                                <option selected>Choose your option</option>
+                                {{#each listCategories}}
+                                    <option value="{{id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
+
                     </div>
-                    <div class="form-group d-flex justify-content-between">
-                        <label for="txtCategoryId" class="my-1">Category</label>
-                        <select name='categoryId' id="txtCategoryId">
-                            <option selected>Choose your option</option>
-                            {{#each listCategories}}
-                            <option value="{{id}}">{{name}}</option>
-                            {{/each}}
-                        </select>
 
-                        <label for="txtArtistId" class="my-1">Artist</label>
-                        <select name='artistId' id="txtArtistId">
-                            <option selected>Choose your option</option>
-                            {{#each listArtists}}
-                            <option value="{{id}}">{{name}}</option>
-                            {{/each}}
-                        </select>
+                </div>
+                <div class="form-group">
+
+                    <div class="row">
+                        <div class="col-1">
+                            <label for="txtArtistId" class="my-1">Artist</label>
+                        </div>
+
+                        <div class="col-11">
+                            <select name='artistId' id="txtArtistId">
+                                <option selected>Choose your option</option>
+                                {{#each listArtists}}
+                                    <option value="{{id}}">{{name}}</option>
+                                {{/each}}
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -185,4 +204,4 @@
                 </button>
             </div>
         </div>
-    </form>
+</form>
