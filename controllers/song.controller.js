@@ -7,16 +7,10 @@ const checkAuthen = require("../authentication/check");
 route.get("/", checkAuthen, async (req, res) => {
   const songRef = db.database().ref("Songs/");
   await songRef.on("value", async (snapshot) => {
-    var songs = [];
+    let songs = [];
 
-    for (let song_id in snapshot.val()) {
-      let _songRef = db.database().ref("/Songs/" + song_id);
-
-      var song;
-
-      await _songRef.on("value", (snapshot) => {
-        song = snapshot.val();
-      });
+    // console.log(Object.values(snapshot.val()));
+    for (let song of Object.values(snapshot.val())) {
       console.log("Song: " + song);
 
       let categoryRef = db.database().ref("/Categories/" + song.categoryId);
@@ -62,7 +56,7 @@ route.post("/add", checkAuthen, async (req, res) => {
 
   console.log(new_song);
 
-  var newKey = db.database().ref().child("/Songs").push().key;
+  let newKey = db.database().ref().child("/Songs").push().key;
   await db
     .database()
     .ref("/Songs/" + newKey)
