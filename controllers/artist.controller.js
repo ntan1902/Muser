@@ -25,14 +25,14 @@ route.get("/add", checkAuthen, async (req, res) => {
 });
 
 route.post("/add", checkAuthen, async (req, res) => {
-  var imgPath = req.body.avatar;
+  let imgPath = req.body.avatar;
   console.log("*************" + imgPath);
   if (imgPath == "") {
     imgPath =
       "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549";
   }
 
-  var newKey = db.database().ref().child("/artists").push().key;
+  let newKey = db.database().ref().child("/artists").push().key;
   await db
     .database()
     .ref("/Artists/" + newKey)
@@ -70,8 +70,8 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 
 route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
-  var previewPath = req.body.previewAvatar;
-  var imgPath = req.body.avatar;
+  let previewPath = req.body.previewAvatar;
+  let imgPath = req.body.avatar;
   if (imgPath == "") {
     imgPath = previewPath;
   }

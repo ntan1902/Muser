@@ -21,6 +21,7 @@
 </script>
 
 <script>
+    $('#txtIsBanned').val($('#txtIsBannedTemp').val());
     function checkEmail(email) {
         if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
             return true;
@@ -97,8 +98,26 @@
             contentType: image_file.type
         }
 
-        const task = ref.child("images/avatars/" + fname).put(image_file, metadata);
-        await task
+
+        const old_img_url = $('#txtPreviewAvatar').val();
+        if (old_img_url) {
+            console.log("old if: " + old_img_url);
+
+            //get file name from url
+            let url_list = old_img_url.split("%2F");
+            let del_file_name = url_list[url_list.length - 1].split("?")[0];
+            console.log("del_file_name" + del_file_name);
+
+            //delete old img
+            const delete_task = ref.child('images/avatars/' + del_file_name);
+            await delete_task.delete().then(() => {
+                console.log("Old image deleted")
+            });
+
+        }
+
+        const upload_task = ref.child("images/avatars/" + fname).put(image_file, metadata);
+        await upload_task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
                 console.log(url);
@@ -135,7 +154,7 @@
                 <label>Preview Avatar</label> <br>
                 <img style="width: 200px;" src="{{this.user.imageURL}}" alt="no preview image found">
             </div>
-            <input type="hidden" value="{{this.user.imageURL}}" name="previewAvatar">
+            <input type="hidden" value="{{this.user.imageURL}}" name="previewAvatar" id="txtPreviewAvatar">
             <input type="hidden" value="" name="avatar" id="txtAvatar">
 
             <div class="form-group">
@@ -146,6 +165,19 @@
             <div class="form-group">
                 <label for="txtName">UserName</label>
                 <input type="text" class="form-control" id="txtName" name="name" value="{{this.user.userName}}">
+            </div>
+
+            <div class="form-group">
+                <label for="txtEmail">Is Banned</label>
+                {{!-- <input type="text" class="form-control" id="txtIsBanned" name="isBanned"
+                    value="{{this.user.isBanned}}" readonly> --}}
+
+                <input type="hidden" class="form-control" id="txtIsBannedTemp" name="isBannedTemp"
+                    value="{{this.user.isBanned}}">
+                <select name='isBanned' id="txtIsBanned" value="{{this.user.isBanned}}">
+                    <option value="true" style="text-transform: capitalize;">True</option>
+                    <option value="false" style="text-transform: capitalize;">False</option>
+                </select>
             </div>
 
         </div>

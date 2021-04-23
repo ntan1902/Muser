@@ -7,12 +7,12 @@ const checkAuthen = require("../authentication/check");
 route.get("/", checkAuthen, async (req, res) => {
   const songRef = db.database().ref("Songs/");
   await songRef.on("value", async (snapshot) => {
-    var songs = [];
+    let songs = [];
 
     for (let song_id in snapshot.val()) {
       let _songRef = db.database().ref("/Songs/" + song_id);
 
-      var song;
+      let song;
 
       await _songRef.on("value", (snapshot) => {
         song = snapshot.val();
@@ -62,7 +62,7 @@ route.post("/add", checkAuthen, async (req, res) => {
 
   console.log(new_song);
 
-  var newKey = db.database().ref().child("/Songs").push().key;
+  let newKey = db.database().ref().child("/Songs").push().key;
   await db
     .database()
     .ref("/Songs/" + newKey)
@@ -103,7 +103,7 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
 
-  var link_avatar, link_uri;
+  let link_avatar, link_uri;
   if (req.body.avatar == "") {
     link_avatar = req.body.previewAvatar;
   } else {

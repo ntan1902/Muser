@@ -90,8 +90,26 @@
             contentType: image_file.type
         }
 
-        const task = ref.child("images/songs/" + fname).put(image_file, metadata);
-        await task
+
+        const old_img_url = $('#txtPreviewAvatar').val();
+        if (old_img_url) {
+            console.log("old if: " + old_img_url);
+
+            //get file name from url
+            let url_list = old_img_url.split("%2F");
+            let del_file_name = url_list[url_list.length - 1].split("?")[0];
+            console.log("del_file_name" + del_file_name);
+
+            //delete old img
+            const delete_task = ref.child('images/songs/' + del_file_name);
+            await delete_task.delete().then(() => {
+                console.log("Old image deleted")
+            });
+
+        }
+
+        const upload_task = ref.child("images/songs/" + fname).put(image_file, metadata);
+        await upload_task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
                 ;
@@ -111,8 +129,26 @@
             contentType: mp3_file.type
         }
 
-        const task = ref.child("songs/" + fname).put(mp3_file, metadata);
-        await task
+
+        const old_uri_link = $('#txtPreviewUri').val();
+        if (old_uri_link) {
+            console.log("old if: " + old_uri_link);
+
+            //get file name from url
+            let url_list = old_uri_link.split("%2F");
+            let del_file_name = url_list[url_list.length - 1].split("?")[0];
+            console.log("del_file_name" + del_file_name);
+
+            //delete old img
+            const delete_task = ref.child('songs/' + del_file_name);
+            await delete_task.delete().then(() => {
+                console.log("Old song deleted")
+            });
+
+        }
+
+        const upload_task = ref.child("songs/" + fname).put(mp3_file, metadata);
+        await upload_task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
                 $("#txtUri").val(url);
