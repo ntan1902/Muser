@@ -1,150 +1,152 @@
 {{#section 'css'}}
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/css/fileinput.min.css">
 {{/section}}
 
 {{#section 'js'}}
-    {{!-- File Upload> --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
+{{!-- File Upload> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/js/fileinput.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-fileinput/5.1.3/themes/fa/theme.min.js"></script>
 
-    <script>
-        $('#fileAvatar').fileinput({
-            theme: 'fa',
-            allowedFileExtensions: ['jpg', 'png'],
-            dropZoneEnabled: false,
-        });
+<script>
+    $('#fileAvatar').fileinput({
+        theme: 'fa',
+        allowedFileExtensions: ['jpg', 'png'],
+        dropZoneEnabled: false,
+        maxImageWidth: 350,
+        maxImageHeight: 350,
+        resizeImage: true,
+    });
 
-        $('#fileUri').fileinput({
-            theme: 'fa',
-            allowedFileExtensions: ['mp3'],
-            dropZoneEnabled: false,
-        });
-    </script>
-    <script>
-        $('#frmRegister').on('submit', function (e) {
-            e.preventDefault();
-            const category = $('#txtCategoryId').val();
-            const artist = $('#txtArtistId').val();
-            const name = $('#txtSongName').val();
+    $('#fileUri').fileinput({
+        theme: 'fa',
+        allowedFileExtensions: ['mp3'],
+        dropZoneEnabled: false,
+    });
+</script>
+<script>
+    $('#frmRegister').on('submit', function (e) {
+        e.preventDefault();
+        const category = $('#txtCategoryId').val();
+        const artist = $('#txtArtistId').val();
+        const name = $('#txtSongName').val();
 
-            if (name.length === 0) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Song Name',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if (category == "Choose your option") {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Category',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if (artist == "Choose your option") {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Artist',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if ($('#fileAvatar').get(0).files.length === 0) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid Image File',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            } else if ($('#fileUri').get(0).files.length === 0) {
-                Swal.fire({
-                    title: 'Error!',
-                    text: 'Invalid MP3 File',
-                    icon: 'error',
-                    confirmButtonText: 'Retry'
-                })
-                return;
-            }
-            else {
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Your song has been saved',
-                    showConfirmButton: false,
-                    timer: 1000
-                }).then(async function () {
-                    await uploadImage();
-                    await uploadUri();
-                    $('#frmRegister').off('submit').submit();
-                });
-            }
-        });
-    </script>
+        if (name.length === 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Song Name',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        } else if (category == "Choose your option") {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Category',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        } else if (artist == "Choose your option") {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Artist',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        } else if ($('#fileAvatar').get(0).files.length === 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid Image File',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        } else if ($('#fileUri').get(0).files.length === 0) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'Invalid MP3 File',
+                icon: 'error',
+                confirmButtonText: 'Retry'
+            })
+            return;
+        }
+        else {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Your song has been saved',
+                showConfirmButton: false,
+                timer: 1000
+            }).then(async function () {
+                await uploadImage();
+                await uploadUri();
+                $('#frmRegister').off('submit').submit();
+            });
+        }
+    });
+</script>
 
-    {{!-- Firebase-Storage --}}
-    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
+{{!-- Firebase-Storage --}}
+<script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-storage.js"></script>
 
-    <script>
-        var firebaseConfig = {
-            apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
-            authDomain: "tinmuser.firebaseapp.com",
-            databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
-            projectId: "tinmuser",
-            storageBucket: "tinmuser.appspot.com",
-            messagingSenderId: "963218315977",
-            appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
-        };
-        firebase.initializeApp(firebaseConfig);
+<script>
+    var firebaseConfig = {
+        apiKey: "AIzaSyCPiohcfxfeYf5hSRaFgcNYtaWPGys_-Ao",
+        authDomain: "tinmuser.firebaseapp.com",
+        databaseURL: "https://tinmuser-default-rtdb.firebaseio.com",
+        projectId: "tinmuser",
+        storageBucket: "tinmuser.appspot.com",
+        messagingSenderId: "963218315977",
+        appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
+    };
+    firebase.initializeApp(firebaseConfig);
 
-        async function uploadImage() {
-            const ref = firebase.storage().ref();
+    async function uploadImage() {
+        const ref = firebase.storage().ref();
 
-            const image_file = document.querySelector("#fileAvatar").files[0];
+        const image_file = document.querySelector("#fileAvatar").files[0];
 
-            const fname = Date.now() + '-' + image_file.name;
+        const fname = Date.now() + '-' + image_file.name;
 
-            const metadata = {
-                contentType: image_file.type
-            }
-
-            const task = ref.child("images/songs/" + fname).put(image_file, metadata);
-            await task
-                .then(snapshot => snapshot.ref.getDownloadURL())
-                .then(url => {
-                    console.log(url);
-                    $("#txtAvatar").val(url);
-                    alert("Image Upload success !!");
-                })
+        const metadata = {
+            contentType: image_file.type
         }
 
-        async function uploadUri() {
-            const ref = firebase.storage().ref();
+        const task = ref.child("images/songs/" + fname).put(image_file, metadata);
+        await task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url);
+                $("#txtAvatar").val(url);
+                alert("Image Upload success !!");
+            })
+    }
 
-            const mp3_file = document.querySelector("#fileUri").files[0];
+    async function uploadUri() {
+        const ref = firebase.storage().ref();
 
-            const fname = Date.now() + '-' + mp3_file.name;
+        const mp3_file = document.querySelector("#fileUri").files[0];
 
-            const metadata = {
-                contentType: mp3_file.type
-            }
+        const fname = Date.now() + '-' + mp3_file.name;
 
-            const task = ref.child("songs/" + fname).put(mp3_file, metadata);
-            await task
-                .then(snapshot => snapshot.ref.getDownloadURL())
-                .then(url => {
-                    console.log(url);
-                    $("#txtUri").val(url);
-                    alert("Song upload success !!");
-                })
+        const metadata = {
+            contentType: mp3_file.type
         }
-    </script>
+
+        const task = ref.child("songs/" + fname).put(mp3_file, metadata);
+        await task
+            .then(snapshot => snapshot.ref.getDownloadURL())
+            .then(url => {
+                console.log(url);
+                $("#txtUri").val(url);
+                alert("Song upload success !!");
+            })
+    }
+</script>
 {{/section}}
 
 <div class="card">
@@ -188,7 +190,7 @@
                             <select name='categoryId' id="txtCategoryId">
                                 <option selected>Choose your option</option>
                                 {{#each listCategories}}
-                                    <option value="{{id}}">{{name}}</option>
+                                <option value="{{id}}">{{name}}</option>
                                 {{/each}}
                             </select>
                         </div>
@@ -207,7 +209,7 @@
                             <select name='artistId' id="txtArtistId">
                                 <option selected>Choose your option</option>
                                 {{#each listArtists}}
-                                    <option value="{{id}}">{{name}}</option>
+                                <option value="{{id}}">{{name}}</option>
                                 {{/each}}
                             </select>
                         </div>
