@@ -1,5 +1,5 @@
 {{#section 'js'}}
-    <script src="/public/js/main.js"></script>
+<script src="/public/js/main.js"></script>
 {{/section}}
 <div class="card shadow">
 
@@ -11,13 +11,14 @@
         </a>
     </div>
     <div class="card-body">
-        <table id="datatable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+        <table id="datatable" class="table table-striped table-bordered compact" cellspacing="0" width="100%">
             <thead>
                 <tr>
                     <th>#</th>
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Edit</th>
+                    <th>Ban</th>
                 </tr>
             </thead>
 
@@ -27,22 +28,36 @@
                     <th>Full Name</th>
                     <th>Email</th>
                     <th>Edit</th>
+                    <th>Ban</th>
                 </tr>
             </tfoot>
 
             <tbody>
                 {{#each this.users}}
-                    <tr>
-                        <th scope="row">{{id}}</th>
-                        <td>{{userName}}</td>
-                        <td>{{email}}</td>
-                        <td>
-                            <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/users/edit/{{id}}"
-                                role="button">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </a>
-                        </td>
-                    </tr>
+                <tr>
+                    <th scope="row">{{id}}</th>
+                    <td>{{userName}}</td>
+                    <td>{{email}}</td>
+                    <td>
+                        <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/users/edit/{{id}}"
+                            role="button">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td>
+                        {{#if isBanned}}
+                        <a name="" id="" class="btn btn-sm btn-primary" title="UnBan" href="/admin/users/unban/{{id}}"
+                            role="button" onclick="return confirm('Are you sure to UNBAN this user ?')">
+                            <i class="fa fa-unlock" aria-hidden="true"></i>
+                        </a>
+                        {{else}}
+                        <a name="" id="" class="btn btn-sm btn-primary" title="Ban" href="/admin/users/ban/{{id}}"
+                            role="button" onclick="return confirm('Are you sure to BAN this user ?')">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                        </a>
+                        {{/if}}
+                    </td>
+                </tr>
                 {{/each}}
             </tbody>
 

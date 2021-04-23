@@ -66,7 +66,6 @@
         appId: "1:963218315977:web:4e1475ccbcb065110e4b18"
     };
     firebase.initializeApp(firebaseConfig);
-    console.log(firebase);
 
     async function uploadImage() {
         const ref = firebase.storage().ref();
@@ -79,8 +78,25 @@
             contentType: image_file.type
         }
 
-        const task = ref.child("images/artists/" + fname).put(image_file, metadata);
-        await task
+        const old_img_url = $('#txtPreviewAvatar').val();
+        if (old_img_url) {
+            console.log("old if: " + old_img_url);
+
+            //get file name from url
+            let url_list = old_img_url.split("%2F");
+            let del_file_name = url_list[url_list.length - 1].split("?")[0];
+            console.log("del_file_name" + del_file_name);
+
+            //delete old img
+            const delete_task = ref.child('images/artists/' + del_file_name);
+            await delete_task.delete().then(() => {
+                console.log("Old image deleted")
+            });
+
+        }
+        //upload new img 
+        const upload_task = ref.child("images/artists/" + fname).put(image_file, metadata);
+        await upload_task
             .then(snapshot => snapshot.ref.getDownloadURL())
             .then(url => {
                 console.log(url);
@@ -116,7 +132,7 @@
                 <label>Preview Avatar</label> <br>
                 <img style="width: 200px;" src="{{this.artist.imageURL}}" alt="no preview image found">
             </div>
-            <input type="hidden" value="{{this.artist.imageURL}}" name="previewAvatar">
+            <input type="hidden" value="{{this.artist.imageURL}}" name="previewAvatar" id="txtPreviewAvatar">
             <input type="hidden" value="" id="txtAvatar" name="avatar">
 
             <div class="form-group">

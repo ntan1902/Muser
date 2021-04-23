@@ -97,7 +97,7 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
 
-  var link_avatar, link_uri;
+  let link_avatar, link_uri;
   if (req.body.avatar == "") {
     link_avatar = req.body.previewAvatar;
   } else {

@@ -24,7 +24,7 @@ route.get("/add", checkAuthen, async (req, res) => {
 });
 
 route.post("/add", checkAuthen, async (req, res) => {
-  var imgPath = req.body.avatar;
+  let imgPath = req.body.avatar;
   if (imgPath == "") {
     //default image
     imgPath =
@@ -42,7 +42,7 @@ route.post("/add", checkAuthen, async (req, res) => {
     .auth()
     .createUserWithEmailAndPassword(new_user.email, new_user.password)
     .then(() => {
-      var newKey = db.database().ref().child("/Users").push().key;
+      let newKey = db.database().ref().child("/Users").push().key;
       db.database()
         .ref("/Users/" + newKey)
         .set(
@@ -62,8 +62,8 @@ route.post("/add", checkAuthen, async (req, res) => {
         );
     })
     .catch((error) => {
-      var errorCode = error.code;
-      var errorMessage = error.message;
+      let errorCode = error.code;
+      let errorMessage = error.message;
       console.log(errorCode);
       console.log(errorMessage);
     });
@@ -87,18 +87,23 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
 
 route.post("/edit/:id", checkAuthen, async (req, res) => {
   const id = req.params.id;
-  var previewPath = req.body.previewAvatar;
+  let previewPath = req.body.previewAvatar;
   console.log("hello");
   console.log("previewPath: " + previewPath);
-  var imgPath = req.body.avatar;
+  let imgPath = req.body.avatar;
 
   if (imgPath == "") {
     imgPath = previewPath;
   }
 
+  let isBanned;
+  if (req.body.isBanned == "true") isBanned = true;
+  else isBanned = false;
+
   const edit_user = {
     imageURL: imgPath,
     userName: req.body.name,
+    isBanned: isBanned,
   };
   console.log(edit_user);
 
@@ -109,6 +114,7 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
       {
         imageURL: edit_user.imageURL,
         userName: edit_user.userName,
+        isBanned: edit_user.isBanned,
       },
       (err) => {
         if (err) {
@@ -122,12 +128,54 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
   res.redirect("/admin/users");
 });
 
+route.get("/ban/:id", checkAuthen, async (req, res) => {
+  const id = req.params.id;
+  await db
+    .database()
+    .ref("Users/" + id)
+    .update(
+      {
+        isBanned: true,
+      },
+      (err) => {
+        if (err) {
+          console.log("Ban failed");
+        } else {
+          console.log("Ban success !");
+        }
+      }
+    );
+
+  res.redirect("/admin/users");
+});
+
+route.get("/unban/:id", checkAuthen, async (req, res) => {
+  const id = req.params.id;
+  await db
+    .database()
+    .ref("Users/" + id)
+    .update(
+      {
+        isBanned: false,
+      },
+      (err) => {
+        if (err) {
+          console.log("UnBan failed");
+        } else {
+          console.log("UnBan success !");
+        }
+      }
+    );
+
+  res.redirect("/admin/users");
+});
+
 route.get("/isUniqueEmail", checkAuthen, async (req, res) => {
   const email = req.query.email;
   const userRef = db.database().ref("/Users");
   const query = userRef.orderByChild("email").equalTo(email);
   await query.once("value", (snapshot) => {
-    var data = snapshot.val();
+    let data = snapshot.val();
     console.log(data);
     if (data === null) {
       res.json(true);

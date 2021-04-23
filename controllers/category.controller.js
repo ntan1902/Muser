@@ -26,7 +26,8 @@ router.get("/edit/:id", checkAuthen, async function (req, res) {
 
 router.post("/edit/:id", checkAuthen, async function (req, res) {
   const id = req.params.id;
-  await db.database()
+  await db
+    .database()
     .ref("/Categories/" + id)
     .update(
       {
@@ -51,8 +52,9 @@ router.get("/add", checkAuthen, function (req, res) {
 });
 
 router.post("/add", checkAuthen, async function (req, res) {
-  var newKey = db.database().ref().child("/Categories").push().key;
-  await db.database()
+  let newKey = db.database().ref().child("/Categories").push().key;
+  await db
+    .database()
     .ref("/Categories/" + newKey)
     .set(
       {
