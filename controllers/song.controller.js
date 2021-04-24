@@ -53,10 +53,8 @@ route.post("/add", checkAuthen, async (req, res) => {
     categoryId: req.body.categoryId,
     artistId: req.body.artistId,
   };
-
-  console.log(new_song);
-
   let newKey = db.database().ref().child("/Songs").push().key;
+
   await db
     .database()
     .ref("/Songs/" + newKey)
