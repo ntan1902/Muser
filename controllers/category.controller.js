@@ -26,12 +26,18 @@ router.get("/edit/:id", checkAuthen, async function (req, res) {
 
 router.post("/edit/:id", checkAuthen, async function (req, res) {
   const id = req.params.id;
+  let previewPath = req.body.previewAvatar;
+  let imgPath = req.body.avatar;
+  if (imgPath == "") {
+    imgPath = previewPath;
+  }
   await db
     .database()
     .ref("/Categories/" + id)
     .update(
       {
         name: req.body.name,
+        imageURL: imgPath,
       },
       (err) => {
         if (err) {
@@ -52,6 +58,13 @@ router.get("/add", checkAuthen, function (req, res) {
 });
 
 router.post("/add", checkAuthen, async function (req, res) {
+  let imgPath = req.body.avatar;
+  console.log("*************" + imgPath);
+  if (imgPath == "") {
+    imgPath =
+      "https://firebasestorage.googleapis.com/v0/b/tinmuser.appspot.com/o/avatar.png?alt=media&token=cbbc9e99-21f7-4990-937d-42bf8399b549";
+  }
+
   let newKey = db.database().ref().child("/Categories").push().key;
   await db
     .database()
@@ -60,6 +73,7 @@ router.post("/add", checkAuthen, async function (req, res) {
       {
         id: newKey,
         name: req.body.name,
+        imageURL: imgPath,
       },
       (err) => {
         if (err) {

@@ -3,6 +3,7 @@ const route = express.Router();
 const path = require("path");
 const db = require("../database/db");
 const checkAuthen = require("../authentication/check");
+const moment = require("moment");
 
 route.get("/", checkAuthen, async (req, res) => {
   const songRef = db.database().ref("Songs/");
@@ -46,12 +47,14 @@ route.get("/add", checkAuthen, async (req, res) => {
 });
 
 route.post("/add", checkAuthen, async (req, res) => {
+  let today = Date.now();
   const new_song = {
     name: req.body.name,
     uri: req.body.uri,
     imageURL: req.body.imageURL,
     categoryId: req.body.categoryId,
     artistId: req.body.artistId,
+    createdAt: today,
   };
   let newKey = db.database().ref().child("/Songs").push().key;
 
@@ -61,11 +64,7 @@ route.post("/add", checkAuthen, async (req, res) => {
     .set(
       {
         id: newKey,
-        name: new_song.name,
-        uri: new_song.uri,
-        imageURL: new_song.imageURL,
-        categoryId: new_song.categoryId,
-        artistId: new_song.artistId,
+        ...new_song,
       },
       (err) => {
         if (err) {
@@ -84,6 +83,8 @@ route.get("/edit/:id", checkAuthen, async (req, res) => {
   await songRef.on("value", (snapshot) => {
     const song = snapshot.val();
     console.log(song);
+    let date = new Date(parseInt(song.createdAt));
+    song.createdAt = moment(date).format("DD/MM/yyyy");
     res.render("vwSong/edit.hbs", {
       layout: "admin.hbs",
       manageSongs: true,
@@ -121,11 +122,7 @@ route.post("/edit/:id", checkAuthen, async (req, res) => {
     .ref("Songs/" + id)
     .update(
       {
-        name: edit_song.name,
-        uri: edit_song.uri,
-        imageURL: edit_song.imageURL,
-        categoryId: edit_song.categoryId,
-        artistId: edit_song.artistId,
+        ...edit_song,
       },
       (err) => {
         if (err) {
