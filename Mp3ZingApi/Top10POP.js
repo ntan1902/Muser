@@ -185,7 +185,7 @@ const addSong = (
         const new_song = {
           id: songId,
           name: songName,
-          uri: res.url,
+          uri: res.url.replace("http", "https"),
           imageURL: imageURL,
           categoryId: categoryId,
           artistId: artistId,
