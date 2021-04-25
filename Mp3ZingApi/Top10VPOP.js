@@ -1,15 +1,5 @@
-// idMusic = "ZOAC7BUF";
-// ZingMp3.getHome((page = 1));
-// ZingMp3.getFullInfo(idMusic).then((data) => {
-//   console.log(data);
-// });
-
-// ZingMp3.getSectionPlaylist("6Z87F988")
-//   .then((data) => console.log(data[1].items))
-//   .catch((err) => console.log(err));
-
 const ZingMp3 = require("zingmp3-api");
-const db = require("./database/db");
+const db = require("../database/db");
 const fetch = require("node-fetch");
 
 // title -> Songs.songName
@@ -24,9 +14,9 @@ const fetch = require("node-fetch");
 // genres[0].name -> Categories.name [Lấy thể loại đầu tiên thôi]
 // data.thumbnailM -> Categories.imageURL
 
-const rap = "ZWZB96AI";
+const vpop = "ZWZB969E";
 
-ZingMp3.getDetailPlaylist(rap)
+ZingMp3.getDetailPlaylist(vpop)
   .then(async (data) => {
     const songs = data.song.items;
     // console.log(data);
@@ -35,16 +25,8 @@ ZingMp3.getDetailPlaylist(rap)
 
     for (let i = 0; i < 5; i++) {
       try {
-        let info = await ZingMp3.getFullInfo(songs[i].encodeId);
-        let {
-          encodeId,
-          title,
-          thumbnailM,
-          streaming,
-          artists,
-          genres,
-          releaseDate,
-        } = info;
+        let info = await ZingMp3.getInfoMusic(songs[i].encodeId);
+        let { encodeId, title, thumbnailM, artists, genres } = info;
         let categoryImageURL = data.thumbnailM;
         // console.log(info);
 
@@ -67,7 +49,7 @@ ZingMp3.getDetailPlaylist(rap)
           thumbnailM,
           categoryId,
           artistId,
-          releaseDate
+          "" + Date.now()
         );
       } catch (err) {
         console.log(err);
@@ -160,7 +142,14 @@ const addArtistName = (artistName, imageURL) => {
   });
 };
 
-const addSong = (encodeId, songName, imageURL, categoryId, artistId, createdAt) => {
+const addSong = (
+  encodeId,
+  songName,
+  imageURL,
+  categoryId,
+  artistId,
+  createdAt
+) => {
   let songId;
   let songNameExist = false;
 
@@ -181,15 +170,14 @@ const addSong = (encodeId, songName, imageURL, categoryId, artistId, createdAt) 
       if (!songNameExist) {
         songId = db.database().ref().child("/Songs").push().key;
 
-
         // Get 320 quality
-        let request = `http://api.mp3.zing.vn/api/streaming/audio/${encodeId}/320`;
+        let request = `https://api.mp3.zing.vn/api/streaming/audio/${encodeId}/320`;
         const res = await fetch(request);
 
         const new_song = {
           id: songId,
           name: songName,
-          uri: res.url.replace("http", "https"),
+          uri: res.url,
           imageURL: imageURL,
           categoryId: categoryId,
           artistId: artistId,
