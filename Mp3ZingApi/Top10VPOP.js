@@ -42,6 +42,16 @@ ZingMp3.getDetailPlaylist(vpop)
           artists[0].thumbnail
         );
 
+        // Get Random date
+        let dates = [
+          1524644469000,
+          1564042869000,
+          1619179858872,
+          1619209221733,
+          1582100469000,
+          Date.now(),
+        ];
+
         // Add song
         addSong(
           encodeId,
@@ -49,7 +59,7 @@ ZingMp3.getDetailPlaylist(vpop)
           thumbnailM,
           categoryId,
           artistId,
-          "" + Date.now()
+          "" + dates[Math.floor(Math.random() * dates.length)]
         );
       } catch (err) {
         console.log(err);
