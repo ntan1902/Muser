@@ -38,3 +38,7 @@ body {
   /* bring your own prefixes */
   transform: translate(-50%, -50%);
 }
+#TagName{
+  background-color: #4caf50;
+  cursor:default;
+}

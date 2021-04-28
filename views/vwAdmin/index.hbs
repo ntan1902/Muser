@@ -1,25 +1,116 @@
-<div class="container my-5">
-    <h3 class="text-warning">Administration Site</h3>
 
-    <div class="card mt-3">
-        <div class="card-header bg-info text-white">
-            CATALOG
-        </div>
-        <div class="card-body">
-            <div class="list-group list-group-flush">
-                <a href="/admin/users" class="list-group-item list-group-item-action">
-                    <b>Users</b>
-                </a>
-                <a href="/admin/artists" class="list-group-item list-group-item-action">
-                    <b>Artists</b>
-                </a>
-                <a href="/admin/categories" class="list-group-item list-group-item-action">
-                    <b>Categories</b>
-                </a>
-                <a href="/admin/songs" class="list-group-item list-group-item-action">
-                    <b>Songs</b>
-                </a>
+<h1 class="d-flex justify-content-center font-weight-bold">TinMuser Statistics Dashboard</h1>
+<body class="">
+  <div class="wrapper ">
+    <div class="main-panel" style="width: 100%;">
+      <div class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-warning card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">people_outline</i>
+                  </div>
+                  <p class="card-category" style="font-weight: bold;">Total users</p>
+                  <h3 class="card-title" style="font-weight: bold;">{{NumUser}}
+                  </h3>
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">date_range</i> Until now
+                  </div>
+                </div>
+              </div>
             </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-danger card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">library_music</i>
+                  </div>
+                  <p class="card-category" style="font-weight: bold;">Total songs</p>
+                  <h3 class="card-title" style="font-weight: bold;">{{songs}}
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                   <i class="material-icons">date_range</i> Until now
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-success card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">online_prediction</i>
+                  </div>
+                  <p class="card-category" style="font-weight: bold;">User online</p>
+                  <h3 class="card-title" style="font-weight: bold;">{{activeUsers}}
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">local_offer</i> Tracked from realtime database
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6">
+              <div class="card card-stats">
+                <div class="card-header card-header-info card-header-icon">
+                  <div class="card-icon">
+                    <i class="material-icons">category</i>
+                  </div>
+                  <p class="card-category" style="font-weight: bold;">Total categories</p>
+                  <h3 class="card-title" style="font-weight: bold;">{{cates}}
+                </div>
+                <div class="card-footer">
+                  <div class="stats">
+                    <i class="material-icons">update</i> Just Updated
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-6 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-success">
+                  <h4 class="card-title">10 Newest songs</h4>
+                  <p class="card-category">Updated</p>
+                </div>
+                <div class="card-body table-responsive">
+                  <table class="table table-hover">
+                    <thead class="text-warning">
+                      <th>No.</th>
+                      <th>Name</th>
+                      <th>Artis</th>
+                      <th>Category</th>
+                      <th>Manage</th>
+                    </thead>
+                    <tbody>
+                    {{#each this.songsArr}}
+                        <tr>
+                            <td>{{order}}</td>
+                            <td>{{name}}</td>
+                            <td>{{artist}}</td>
+                            <td>{{category}}</td>
+                            <td>
+                                <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
+                                   role="button">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+</body>

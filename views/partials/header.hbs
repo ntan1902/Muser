@@ -15,7 +15,41 @@
         {{#if checked}}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item mr-2 my-2">
-                <p class="btn btn-outline-success active">
+                <p class="btn" id="TagName">
+                    TinMuser Administrator
+                </p>
+            </li>
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-primary" href="/admin/users">
+                    Users
+                </a>
+            </li>
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-primary" href="/admin/artists" >
+                    Artists
+                </a>
+            </li>
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-primary" href="/admin/categories">
+                    Categories
+                </a>
+            </li>
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-primary" href="/admin/songs" >
+                    Songs
+                </a>
+            </li>
+
+            <li class="nav-item mr-2 my-2">
+                <a class="btn btn-primary" href="/account/logout">
+                    Logout
+                </a>
+            </li>
+        </ul>
+        {{else}}
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item mr-2 my-2">
+          <p class="btn" id="TagName">
                     TinMuser Administrator
                 </p>
             </li>
