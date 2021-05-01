@@ -14,19 +14,21 @@ const fetch = require("node-fetch");
 // genres[0].name -> Categories.name [Lấy thể loại đầu tiên thôi]
 // data.thumbnailM -> Categories.imageURL
 
-const rap = "ZWZB96AI";
+const rap = "ZFFBDB6E";
+const electronic = "ZWZB96C7";
+const pop = "ZWZB96AB";
+const vpop = "ZWZB969E";
 
-ZingMp3.getDetailPlaylist(rap)
+ZingMp3.getDetailPlaylist(vpop)
   .then(async (data) => {
     const songs = data.song.items;
-    // console.log(data);
-    // let info = await ZingMp3.getFullInfo(songs[9].encodeId);
+    // let info = await ZingMp3.getInfoMusic(songs[0].encodeId);
     // console.log(info);
-
-    for (let i = 0; i < 5; i++) {
+    // console.log(data);
+    for (let i = 0; i < 10; i++) {
       try {
         let info = await ZingMp3.getInfoMusic(songs[i].encodeId);
-        let { encodeId, title, thumbnailM, artists, genres } = info;
+        let { encodeId, title, thumbnailM, artists, genres, like } = info;
         let categoryImageURL = data.thumbnailM;
         // console.log(info);
 
@@ -39,7 +41,8 @@ ZingMp3.getDetailPlaylist(rap)
         // Add artist
         let artistId = await addArtistName(
           artists[0].name,
-          artists[0].thumbnail
+          artists[0].thumbnail,
+          artists[0].totalFollow
         );
 
         // Get Random date
@@ -59,6 +62,7 @@ ZingMp3.getDetailPlaylist(rap)
           thumbnailM,
           categoryId,
           artistId,
+          like,
           "" + dates[Math.floor(Math.random() * dates.length)]
         );
       } catch (err) {
@@ -110,7 +114,7 @@ const addCategory = (categoryName, imageURL) => {
   });
 };
 
-const addArtistName = (artistName, imageURL) => {
+const addArtistName = (artistName, imageURL, totalFollow) => {
   let artistId;
   let artistNameExist = false;
 
@@ -119,6 +123,7 @@ const addArtistName = (artistName, imageURL) => {
     artistRef.once("value", async (snapshot) => {
       if (snapshot.exists()) {
         _artists = Object.values(snapshot.val());
+
         _artists.forEach((_artist) => {
           if (_artist.name === artistName) {
             artistNameExist = true;
@@ -137,6 +142,7 @@ const addArtistName = (artistName, imageURL) => {
               id: artistId,
               name: artistName,
               imageURL: imageURL,
+              totalFollow: totalFollow,
             },
             (err) => {
               if (err) {
@@ -158,6 +164,7 @@ const addSong = (
   imageURL,
   categoryId,
   artistId,
+  like,
   createdAt
 ) => {
   let songId;
@@ -191,6 +198,7 @@ const addSong = (
           imageURL: imageURL,
           categoryId: categoryId,
           artistId: artistId,
+          like: like,
           createdAt: "" + createdAt,
         };
         await db
