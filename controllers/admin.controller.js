@@ -8,11 +8,16 @@ route.get("/", checkAuthen, async ( req, res)=>{
   const songs = db.database().ref("Songs/")
   const test = db.database().ref("Songs/").orderByChild("createdAt").limitToLast(10);
   const users = db.database().ref("Users/")
+  const artists = db.database().ref("Users/").orderByChild("totalFollow").limitToLast(10);
   let NumUser = 0;
   var activeUsers =0;
   var NumCate = 0;
   var NumSongs = 0;
   var songsArr = [];
+  var artistArr = [];
+  artists.on("value", async (snapshot)=>{
+    artistArr = Object.values(snapshot.val())
+  })
   cates.on("value", async (snapshot) => {
     const data = Object.values(snapshot.val());
     NumCate = data.length;
@@ -45,6 +50,9 @@ route.get("/", checkAuthen, async ( req, res)=>{
       songsArr.push(song);
       i++;
     }
+
+
+
     res.render("vwAdmin/index", {
       layout: "main.hbs",
       checked: true,
@@ -53,6 +61,7 @@ route.get("/", checkAuthen, async ( req, res)=>{
       songs: NumSongs,
       activeUsers,
       songsArr,
+      artistArr
     });
   });
 });

@@ -1,10 +1,20 @@
-
+<header>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+  <link rel="stylesheet" type="text/css"
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+  {{!--
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css"> --}}
+  <link href="/public/css/material-dashboard.css?v=2.1.2" rel="stylesheet" />
+  <link rel="stylesheet" href="/public/css/demo.css">
+</header>
 <h1 class="d-flex justify-content-center font-weight-bold">TinMuser Statistics Dashboard</h1>
+
 <body class="">
   <div class="wrapper ">
     <div class="main-panel" style="width: 100%;">
       <div class="content">
         <div class="container-fluid">
+          {{!-- Statistics --}}
           <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6">
               <div class="card card-stats">
@@ -17,7 +27,7 @@
                   </h3>
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
+                  <div class="stats font-weight-bold">
                     <i class="material-icons">date_range</i> Until now
                   </div>
                 </div>
@@ -33,8 +43,8 @@
                   <h3 class="card-title" style="font-weight: bold;">{{songs}}
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
-                   <i class="material-icons">date_range</i> Until now
+                  <div class="stats font-weight-bold">
+                    <i class="material-icons">date_range</i> Until now
                   </div>
                 </div>
               </div>
@@ -49,7 +59,7 @@
                   <h3 class="card-title" style="font-weight: bold;">{{activeUsers}}
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
+                  <div class="stats font-weight-bold">
                     <i class="material-icons">local_offer</i> Tracked from realtime database
                   </div>
                 </div>
@@ -65,22 +75,52 @@
                   <h3 class="card-title" style="font-weight: bold;">{{cates}}
                 </div>
                 <div class="card-footer">
-                  <div class="stats">
+                  <div class="stats font-weight-bold">
                     <i class="material-icons">update</i> Just Updated
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="row d-flex justify-content-center">
+          {{!-- Chart --}}
+          <div class="row">
             <div class="col-lg-6 col-md-12">
               <div class="card">
+                <div class="card-header card-header-info">
+                  <h4 class="card-title font-weight-bold">Popular Artists</h4>
+                  <p class="card-category font-weight-bold">Updated</p>
+                </div>
+                <div class="card-body">
+                  <canvas id="topArtistChart"></canvas>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-12">
+              <div class="card">
+                <div class="card-header card-header-danger">
+                  <h4 class="card-title font-weight-bold">Popular Songs</h4>
+                  <p class="card-category font-weight-bold">Updated</p>
+                </div>
+                <div class="card-body">
+                  <canvas id="topSongChart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        <div class="row">
+
+        </div>
+          {{!--End Chart --}}
+          {{!-- Table --}}
+          <div class="row d-flex justify-content-center">
+            <div class="col-lg-10 col-md-12">
+              <div class="card">
                 <div class="card-header card-header-success">
-                  <h4 class="card-title">10 Newest songs</h4>
-                  <p class="card-category">Updated</p>
+                  <h4 class="card-title font-weight-bold">10 Newest songs</h4>
+                  <p class="card-category font-weight-bold">Updated</p>
                 </div>
                 <div class="card-body table-responsive">
-                  <table class="table table-hover">
+                  <table class="table table-hover font-weight-bold">
                     <thead class="text-warning">
                       <th>No.</th>
                       <th>Name</th>
@@ -89,20 +129,20 @@
                       <th>Manage</th>
                     </thead>
                     <tbody>
-                    {{#each this.songsArr}}
-                        <tr>
-                            <td>{{order}}</td>
-                            <td>{{name}}</td>
-                            <td>{{artist}}</td>
-                            <td>{{category}}</td>
-                            <td>
-                                <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
-                                   role="button">
-                                    <i class="fa fa-pencil" aria-hidden="true"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    {{/each}}
+                      {{#each this.songsArr}}
+                      <tr>
+                        <td>{{order}}</td>
+                        <td>{{name}}</td>
+                        <td>{{artist}}</td>
+                        <td>{{category}}</td>
+                        <td>
+                          <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
+                            role="button">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      {{/each}}
                     </tbody>
                   </table>
                 </div>
@@ -113,4 +153,9 @@
       </div>
     </div>
   </div>
+  {{!-- Firebase-Storage --}}
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.4.3/firebase-database.js"></script>
+  <script src="/public/js/chart.js"></script>
 </body>
