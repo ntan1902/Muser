@@ -140,6 +140,12 @@
                 <input type="text" class="form-control" id="txtName" name="name" value="{{this.artist.name}}">
             </div>
 
+            <div class="form-group">
+                <label for="txtFollow">Follower(s)</label>
+                <input type="text" class="form-control" id="txtFollow" name="totalFollow"
+                    value="{{this.artist.totalFollow}}" readonly>
+            </div>
+
         </div>
         <div class="card-footer">
             <a class="btn btn-primary" href="/admin/artists" role="button">
