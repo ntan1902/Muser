@@ -25,7 +25,7 @@
                 </a>
             </li>
             <li class="nav-item mr-2 my-2">
-                <a class="btn btn-primary" href="/admin/artists" >
+                <a class="btn btn-primary" href="/admin/artists">
                     Artists
                 </a>
             </li>
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li class="nav-item mr-2 my-2">
-                <a class="btn btn-primary" href="/admin/songs" >
+                <a class="btn btn-primary" href="/admin/songs">
                     Songs
                 </a>
             </li>
@@ -49,15 +49,18 @@
         {{else}}
         <ul class="navbar-nav ml-auto">
             <li class="nav-item mr-2 my-2">
-          <p class="btn" id="TagName">
+                <p class="btn" id="TagName">
                     TinMuser Administrator
                 </p>
             </li>
+            {{#if isLogin}}
+            {{else}}
             <li class="nav-item mr-2 my-2">
                 <a class="btn btn-outline-success" href="/account/logout">
                     Logout
                 </a>
             </li>
+            {{/if}}
         </ul>
         {{/if}}
     </div>

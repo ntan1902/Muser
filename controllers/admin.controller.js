@@ -50,9 +50,6 @@ route.get("/", checkAuthen, async ( req, res)=>{
       songsArr.push(song);
       i++;
     }
-
-
-
     res.render("vwAdmin/index", {
       layout: "main.hbs",
       checked: true,

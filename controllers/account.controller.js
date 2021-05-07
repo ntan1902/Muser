@@ -5,7 +5,9 @@ route.get("/signin", (req, res) => {
   if(req.user){
     return res.redirect("/admin")
   }
-  res.render("vwAccount/signin");
+  res.render("vwAccount/signin",{
+    isLogin: true
+  });
 });
 
 route.post(
