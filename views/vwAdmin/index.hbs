@@ -107,9 +107,9 @@
               </div>
             </div>
           </div>
-        <div class="row">
+          <div class="row">
 
-        </div>
+          </div>
           {{!--End Chart --}}
           {{!-- Table --}}
           <div class="row d-flex justify-content-center">
@@ -130,18 +130,18 @@
                     </thead>
                     <tbody>
                       {{#each this.songsArr}}
-                      <tr>
-                        <td>{{order}}</td>
-                        <td>{{name}}</td>
-                        <td>{{artist}}</td>
-                        <td>{{category}}</td>
-                        <td>
-                          <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
-                            role="button">
-                            <i class="fa fa-pencil" aria-hidden="true"></i>
-                          </a>
-                        </td>
-                      </tr>
+                        <tr>
+                          <td>{{order}}</td>
+                          <td>{{name}}</td>
+                          <td>{{artist}}</td>
+                          <td>{{category}}</td>
+                          <td>
+                            <a name="" id="" class="btn btn-sm btn-primary" title="Edit" href="/admin/songs/edit/{{id}}"
+                              role="button">
+                              <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                          </td>
+                        </tr>
                       {{/each}}
                     </tbody>
                   </table>

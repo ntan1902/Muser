@@ -18,8 +18,8 @@ require("./middlewares/sessions.mdw")(app);
 require("./middlewares/views.mdw")(app);
 require("./middlewares/locals.mdw")(app);
 require("./middlewares/controllers.mdw")(app);
- 
-require("./authentication/authen")
+
+require("./authentication/authen");
 app.listen(port, () => {
   console.log(`Web server is listening on http://localhost:${port}`);
 });

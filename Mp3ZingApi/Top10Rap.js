@@ -19,58 +19,65 @@ const electronic = "ZWZB96C7";
 const pop = "ZWZB96AB";
 const vpop = "ZWZB969E";
 
-ZingMp3.getDetailPlaylist(vpop)
-  .then(async (data) => {
-    const songs = data.song.items;
-    // let info = await ZingMp3.getInfoMusic(songs[0].encodeId);
-    // console.log(info);
-    // console.log(data);
-    for (let i = 0; i < 10; i++) {
-      try {
-        let info = await ZingMp3.getInfoMusic(songs[i].encodeId);
-        let { encodeId, title, thumbnailM, artists, genres, like } = info;
-        let categoryImageURL = data.thumbnailM;
-        // console.log(info);
+const categories = ["ZFFBDB6E", "ZWZB96C7", "ZWZB96AB", "ZWZB969E", "ZODEZ9WU"];
 
-        // Add category
-        let categoryId = await addCategory(
-          genres[genres.length - 1].name,
-          categoryImageURL
-        );
+categories.forEach((category) => {
+  ZingMp3.getDetailPlaylist(category)
+    .then(async (data) => {
+      const songs = data.song.items;
+      // let info = await ZingMp3.getInfoMusic(songs[0].encodeId);
+      // console.log(info);
+      // console.log(data);
 
-        // Add artist
-        let artistId = await addArtistName(
-          artists[0].name,
-          artists[0].thumbnail,
-          artists[0].totalFollow
-        );
+      // Add category
+      let categoryId = await addCategory(data.title, data.thumbnailM);
 
-        // Get Random date
-        let dates = [
-          1524644469000,
-          1564042869000,
-          1619179858872,
-          1619209221733,
-          1582100469000,
-          Date.now(),
-        ];
+      for (let i = 0; i < 10; i++) {
+        try {
+          let info = await ZingMp3.getInfoMusic(songs[i].encodeId);
+          let { encodeId, title, thumbnailM, artists, genres, like } = info;
 
-        // Add song
-        addSong(
-          encodeId,
-          title,
-          thumbnailM,
-          categoryId,
-          artistId,
-          like,
-          "" + dates[Math.floor(Math.random() * dates.length)]
-        );
-      } catch (err) {
-        console.log(err);
+          // let categoryImageURL = data.thumbnailM;
+          // Add category
+          // let categoryId = await addCategory(
+          //   genres[genres.length - 1].name,
+          //   categoryImageURL
+          // );
+
+          // Add artist
+          let artistId = await addArtistName(
+            artists[0].name,
+            artists[0].thumbnail,
+            artists[0].totalFollow
+          );
+
+          // Get Random date
+          let dates = [
+            1524644469000,
+            1564042869000,
+            1619179858872,
+            1619209221733,
+            1582100469000,
+            Date.now(),
+          ];
+
+          // Add song
+          addSong(
+            encodeId,
+            title,
+            thumbnailM,
+            categoryId,
+            artistId,
+            like,
+            "" + dates[Math.floor(Math.random() * dates.length)]
+          );
+        } catch (err) {
+          console.log(err);
+        }
       }
-    }
-  })
-  .catch((err) => console.log(err));
+    })
+    .catch((err) => console.log(err));
+});
 
 const addCategory = (categoryName, imageURL) => {
   let categoryId;
